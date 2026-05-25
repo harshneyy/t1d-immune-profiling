@@ -1,0 +1,1215 @@
+Honardoost et al. Genome Medicine     (2024) 16:45                                                                                                      Genome Medicine
+https://doi.org/10.1186/s13073-024-01300-z
+
+
+
+
+ RESEARCH                                                                                                                                                       Open Access
+
+Systematic immune cell dysregulation
+and molecular subtypes revealed by single‑cell
+RNA‑seq of subjects with type 1 diabetes
+Mohammad Amin Honardoost1,2,3, Andreas Adinatha1, Florian Schmidt1, Bobby Ranjan1,
+Maryam Ghaeidamini1, Nirmala Arul Rayan1, Michelle Gek Liang Lim1, Ignasius Joanito1, Quy Xiao Xuan Lin1,
+Deepa Rajagopalan1, Shi Qi Mok4, You Yi Hwang5, Anis Larbi5, Chiea Chuen Khor4, Roger Foo2,6,
+Bernhard Otto Boehm7,8,9* and Shyam Prabhakar1,8,10*
+
+
+
+  Abstract
+  Background Type 1 diabetes mellitus (T1DM) is a prototypic endocrine autoimmune disease resulting
+  from an immune-mediated destruction of pancreatic insulin-secreting β cells. A comprehensive immune cell pheno-
+  type evaluation in T1DM has not been performed thus far at the single-cell level.
+  Methods In this cross-sectional analysis, we generated a single-cell transcriptomic dataset of peripheral blood
+  mononuclear cells (PBMCs) from 46 manifest T1DM (stage 3) cases and 31 matched controls.
+  Results We surprisingly detected profound alterations in circulatory immune cells (1784 dysregulated genes in 13
+  immune cell types), far exceeding the count in the comparator systemic autoimmune disease SLE. Genes upregulated
+  in T1DM were involved in WNT signaling, interferon signaling and migration of T/NK cells, antigen presentation by B
+  cells, and monocyte activation. A significant fraction of these differentially expressed genes were also altered in T1DM
+  pancreatic islets. We used the single-cell data to construct a T1DM metagene z-score (TMZ score) that distinguished
+  cases and controls and classified patients into molecular subtypes. This score correlated with known prognostic
+  immune markers of T1DM, as well as with drug response in clinical trials.
+  Conclusions Our study reveals a surprisingly strong systemic dimension at the level of immune cell network
+  in T1DM, defines disease-relevant molecular subtypes, and has the potential to guide non-invasive test development
+  and patient stratification.
+  Keywords Type 1 diabetes mellitus (T1DM), Peripheral blood mononuclear cells (PBMCs), Single-cell RNA sequencing
+  (scRNA-seq)
+
+
+
+
+*Correspondence:
+Bernhard Otto Boehm
+bernhard.o.boehm@mailbox.org
+Shyam Prabhakar
+prabhakars@gis.a-star.edu.sg
+Full list of author information is available at the end of the article
+
+
+                                             © The Author(s) 2024. Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which
+                                             permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the
+                                             original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or
+                                             other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line
+                                             to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory
+                                             regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this
+                                             licence, visit http://​creat​iveco​mmons.​org/​licen​ses/​by/4.​0/. The Creative Commons Public Domain Dedication waiver (http://​creat​iveco​
+                                             mmons.​org/​publi​cdoma​in/​zero/1.​0/) applies to the data made available in this article, unless otherwise stated in a credit line to the data.
+Honardoost et al. Genome Medicine   (2024) 16:45                                                              Page 2 of 24
+
+
+
+
+Background                                                    abnormalities in GP T1DM is still limited, as is our
+Type 1 diabetes mellitus (T1DM) is a prototypic               ability to identify patient subtypes.
+endocrine autoimmune disease driven by chronic                   Recently, single-cell RNA-seq (scRNA-seq) profiling
+inflammatory responses against insulin-secreting              of ex vivo (cultured) human pancreatic islets shed light
+pancreatic β cells, leading to insulin deficiency with        on cellular-resolution gene expression signatures in
+life-long dependence on exogenous insulin treatment           T1DM [29]. However, since immune cells comprised only
+[1]. The disease is characterized by chronic inflamma-        a minor fraction of cells identified, this study focused
+tion with impaired homeostasis at the level of innate         primarily on endocrine and exocrine cell types. Another
+and adaptive immune cells. The existing therapies for         study of T1DM-related immune cell phenotypes analyzed
+T1DM are still limited in terms of long-term efficacy         scRNA-seq data from PBMCs of 4 T1DM subjects and 4
+and addressing the underlying pathophysiology [2, 3].         controls and identified IL32-expressing cells as a signa-
+Patient heterogeneity has been considered a key factor        ture of T1DM [24]. In view of the current situation, there
+in treatment response [2]. Moreover, data suggest that        is an unmet need for a more comprehensive analysis of
+diverse immune cell types and signaling pathways con-         immune cells in T1DM.
+tribute to T1DM pathology [4]. Thus, a comprehensive             We hypothesized that T1DM, an organ specific auto-
+analysis of immune cell phenotypes, cell type-specific        immune disease, may involve systemic immune pertur-
+molecular traits and their potential variation across         bation in cell type abundance as well as cell type-specific
+affected individuals is called for [5].                       gene expression. In this cross-sectional study, we used
+   A related challenge is that T1DM-related molecular         the technique of scRNA-seq to characterize PBMCs from
+mechanisms are poorly understood in humans. Mecha-            46 islet-cell autoantibody-positive manifest T1DM cases
+nistic studies are hindered by the fact that pancreatic       (stage 3) and 31 healthy controls matched for age, gender,
+islets, which are the primary target of autoimmune            and presence of T1DM-associated risk HLA haplotypes.
+attack, are difficult to access in living individuals. How-   Our analysis revealed shifts in cellular composition as
+ever, multiple lines of evidence indicate that systemic       well as profound molecular aberrations in 12/14 periph-
+immune cell dysregulation, including Treg and NK              eral immune cell types from T1DM subjects. Notably,
+cells, precedes T1DM diagnosis, and is implicated in          we identified widespread upregulation of genes associ-
+disease pathogenesis and progression [6–12]. Further-         ated with immune cell activation, though regulon analy-
+more, fine-mapping of genetic risk factors indicates          sis indicated that this process may be driven by distinct
+that T1DM-associated risk variants exert a significant        transcription factors (TFs) in T, B, and myeloid cells.
+impact on the transcriptomes of circulating immune            The upregulated and downregulated genes we identi-
+cells [13–16]. Consequently, non-invasive approaches          fied in PBMC cell types showed significant overlap with
+using peripheral blood samples have become an essen-          transcriptome changes in T1DM pancreas, suggesting
+tial strategy for identification of markers related to the    molecular links between systemic and organ-specific
+progression of the autoimmune disease.                        immune responses [18, 29]. Our differentially expressed
+   Along this line, immunological studies of T1DM have        genes (DEGs) also showed significant overlap with mark-
+greatly advanced the field, for example by highlighting       ers that predict seroconversion (appearance of autoanti-
+the role of specific, disease-predisposing human leu-         bodies in peripheral blood) or T1DM onset in high-risk
+kocyte antigen (HLA) haplotypes [17, 18], by revealing        individuals. We also used the single-cell data to define
+insulin, GAD-65, and IA-2A as well as β cells proteins as     cell type-specific metagene expression scores segregating
+common autoantigens [19–21], and by identifying com-          cases and controls. Importantly, these metagene scores
+mon aberrations in cell composition and gene expres-          were highly correlated across cell types, even though the
+sion in peripheral immune cells [6, 7, 22–25]. Of note,       DEG sets were largely non-overlapping. To characterize
+most studies have examined the pre-diabetic molecu-           immune variation across the cohort, we therefore aggre-
+lar immune signature of first-degree relatives (FDR) of       gated scores across cell types to define a single compos-
+T1DM subjects [26]. In contrast to T1DM cases in the          ite score for each sample, which we defined as the T1DM
+general population (GP), FDR T1DM subjects exhibit a          metagene Z-score (TMZ score). The TMZ score for each
+lower age at diagnosis [27] and are enriched for mono-        individual correlated with GAD autoantibody (GADA)
+genic variants of significant impact [28]. Moreover, the      titer and the number of high-risk HLA haplotypes as well
+vast majority of existing molecular analyses are based        as with drug response in interventional clinical trials.
+on analysis of bulk samples, which obscures the het-          Finally, we found that DEGs in effector T cells and B cells
+erogeneity of immune cell types and cell states. Con-         were enriched for T1DM genetic risk.
+sequently, our understanding of molecular and cellular           In summary, our case-control study shows unex-
+                                                              pectedly strong systemic immune cell dysregulation in
+Honardoost et al. Genome Medicine   (2024) 16:45                                                             Page 3 of 24
+
+
+
+
+T1DM, defines disease-relevant T1DM molecular sub-            corresponding to a level below 58 mmol/mol (IFCC; SI
+types, and has the potential for non-invasive test devel-     unit) [32–34]. Since the counts of lymphocytes as well as
+opment in T1DM.                                               lymphocyte subsets are known to be influenced by hor-
+                                                              monal factors and temperature, to achieve pre-analytical
+Methods                                                       consistency, the blood collection was only performed in
+Sample collection and cohort details                          the morning (8:00–10:00 am) at a fasting state during
+European stage 3 T1DM subjects were selected from a           the seasonal period of spring until autumn. All technical
+cohort of 1634 T1D patients from Baden-Wuerttemberg           procedures and protocols for the recruitment, blood col-
+in Germany. The healthy controls matched for age, gen-        lection, and PBMC isolation were reviewed and approved
+der, and T1DM risk HLA haplotypes were selected from          by the Institutional Review Board (IRB) at the Division of
+a population-based cohort of more than 8367 subjects,         Endocrinology and Diabetes in Ulm University, Germany
+again from Baden-Wuerttemberg. To rule out the pres-          (IRB no. 299604393R) [35]. Accordingly, PBMCs were
+ence of an infection or any other inflammatory process,       isolated from approximately 10 ml of heparinised whole
+we selected subjects with CRP below 1 mg/L (high sen-         blood using standard Ficoll-Hypaque density gradient
+sitivity C-reactive protein (hs-CRP); Roche Cobas 6000        centrifugation method. Isolated PBMCs were frozen in
+analytical system). BMI was restricted within the range       Fetal bovine serum (FBS) containing 10% dimethylsulfox-
+from 18.5 to 24.9 kg/m2, i.e., the WHO recommenda-            ide (DMSO) and shipped to Genome Institute of Singa-
+tion of a normal BMI for Europeans. Additional inclusion      pore for downstream experiments. The sequence-specific
+criteria were as follows: normal aspartate transaminase       oligonucleotide DNA amplification method was utilized
+(AST) levels (below 33 units per liter (U/L) and alanine      for HLA class II genotyping using HLA-DRB1, HLA-
+transaminase (ALT) levels (below 40 units per liter (U/L),    DQA1, and HLADQB1 specific primers [36, 37]. Autoan-
+normal creatine serum values (below 110 µmol/L for            tibody assay for detection of two main autoantibodies in
+men, below 95 µmol/L for women) resulting in normal           T1DM (i.e., GADA and IA-2A) was conducted based on
+values of the estimated glomerular filtration rate (eGFR),    previously established fluid-phase-antigen-binding assay
+normal TSH level (range 0.3–4 mU/l) indicative of nor-        [38]. The clinical information of all samples included in
+mal thyroid function, TPO antibody negative, normal           current study are summarized in the Additional file 2:
+vitamin ­B12 serum levels (range between 350 and 900 pg/      Table S1-S2.
+ml), normal 25-OH Vit D levels (range between 30 and
+70 µg/l), normal levels of plasma ferritin (ranges between    Sample preparation and scRNA‑seq
+50 and 330 ng/mL) as a marker of a normal iron status as      Frozen PBMCs samples were thawed in 10 ml of pre-
+well as a surrogate marker of inflammation, and normal        warmed thawing media (RPMI 1640 supplemented with
+serum zinc levels (range between 70 and 120 µg/dL) to         5% human serum, 1% penicillin-streptomycin, and 1%
+show an adequate nutritional status and to rule out prob-     glutamine). After centrifugation at 300g, the superna-
+lems absorbing nutrients.                                     tant was removed and cells were resuspended in 10 ml
+  All control subjects were negative for ICA, GADA,           of washing media (RPMI 1640 supplemented with 10%
+IA-2A, and ZnT8 antibodies. The T1D subjects were             fetal bovine serum (FBS), 1% penicillin-streptomycin,
+positive for at least 2 islet cell autoantibodies. All T1D    1% glutamine). Cells were washed two times with phos-
+subjects selected were GADA positive [30, 31]. The            phate-buffered saline (PBS) containing 0.04% bovine
+Roche Elecsys C-Peptide assay was used to quantify fast-      serum albumin (BSA) and filtered through a 5-µm cell
+ing C-peptide levels in T1D subjects. All T1D subjects        strainer. The cell concentration and viability were meas-
+revealed fasting C-peptide levels below 0.01 ng/mL and        ured in trypan blue using the Bio Rad ­TC20TM Auto-
+were therefore considered as “C-peptide negative.” In         mated Cell Counter (Bio-Rad). Droplet-based scRNA-seq
+addition, all T1D subjects were requiring insulin doses       was applied to the cohort samples using the single-cell 3′
+above 0.65 units of insulin per kg body weight per day.       reagent kit (V2, 10x Genomics), according to the manu-
+None of the T1D subjects had evidence of microalbumi-         facturer’s protocol. Single-cell suspensions from four
+nuria as a marker of diabetic nephropathy or evidence         samples (two cases and two healthy controls) were mixed
+of diabetic retinopathy. In subjects with T1DM, blood         at the final concentration of 1 × 106 cells/ml. Before
+glucose during the blood collection had to be within the      mixing samples, an aliquot of 2 million cells from each
+range of a predefined target, i.e., 80–140 mg/dl to exclude   sample was centrifuged and kept at − ­80o C and used for
+a potential impact of elevated glucose levels, altered        DNA extraction and genotyping. Pooled cell suspensions
+plasma cortisol and catecholamine levels on immune cell       were loaded onto the ChromiumTM Controller instru-
+counts. Also, HbA1c levels had to label a well-controlled     ment at the recommended volume required for captur-
+diabetes status with a level below 7.5% (DCCT/NGSP;           ing 16,000 cells per pool. The cDNA amplification and
+Honardoost et al. Genome Medicine   (2024) 16:45                                                                 Page 4 of 24
+
+
+
+
+library preparation were performed using the library             incubation with fluorescence-conjugated antibodies, the
+construction kit (10x Genomics). Quality, size distribu-         cells were washed and re-suspended in buffer solution
+tion, and quantity of generated cDNA and sequencing              (PBS containing 5% FBS and 2 mM EDTA). The stained
+libraries were confirmed using the High Sensitivity DNA          cells were kept on ice before loading into the FACS sym-
+kit (Agilent) and Kapa kit (Illumina). After quality con-        phony machine and data acquisition. The single stained
+trol, pooled libraries were diluted in final concentration       files from the optimal antibody concentration were used
+
+                                                                 nophenotyping was performed using the BD Symphony®
+of 10 nM and were sequenced on Illumina HiSeq 4000 to            to establish the compensation matrix. Finally, immu-
+get on average read-depth of 80,000 reads/cell using fol-
+lowing chemistry settings: read 1: 26 cycles; i7 index: 8        machine for 10 T1DM and 9 healthy samples (independ-
+cycles; i5 index: 0 cycles; and read 2: 98 cycles.               ent validation cohort) and a minimum of 50,000 events
+                                                                 were acquired per sample (Additional file 1: Fig. S4a).
+SNP‑array genotyping
+
+using QIAamp® DNA blood Mini Kit according to the
+Genomic DNA was extracted from 2 to 3 million PBMCs
+                                                                 Processing and clustering of FACS symphony data
+                                                                 The compensated flow cytometry data were gated in
+using the Illumina Infinium® HTS Assay. The intensity
+manufacturer’s protocol, and samples were genotyped
+                                                                 the FlowJo (V 10.6) software using the standard gat-
+data files collected by the Illumina HiScan system were          ing strategy for selecting cell population, singlets, live,
+analyzed with the Illumina GenomeStudio software, and            and ­C D45+ immune cells. The compensated channel
+PLINK binary genotyping data were extracted for down-                                                                ­ D45+
+                                                                 values of the final population (i.e., live, single, C
+stream analysis.                                                 cells) from case and control samples were exported as
+                                                                 CSV files. Next, these files were imported into R, and
+Multi‑parametric FACS symphony                                   after down-sampling of each sample into 10,000 single
+An antibody staining panel consisting of 23 markers was          cells, they were concatenated into a Seurat object (Seu-
+designed for immunophenotyping of PBMCs populations              rat package V3) containing 190,000 cells. The Seurat
+using a variety of fluorochromes with minimum spec-              package functionalities for dimensional reduction using
+tral cross-talk. This panel includes 16 lineage markers          the Uniform Manifold Approximation and Projection
+(e.g., CD45, CCR7, CD19, IgD, IgM, IgG, IgE, IgA, CD5,           (UMAP) method and the unsupervised graph based
+CD3, TCRab, TCRgd, CD4, CD8, CD14, and CD16)                     clustering using the Louvain algorithm were utilized
+for detecting different populations of B cells (e.g., naïve      to calculate UMAP embeddings and perform unsu-
+­IgD+/IgM+ B cells or switched I­gG+/IgE+/IgA+ memory            pervised clustering based on 12 lineage makers includ-
+ B cells), T cells ­(TCRab+ or ­TCRgd+ T cells), and mono-       ing CD3, TCRab, TCRgd, CD19, IgD, IgM, IgG, IgE,
+ cytes (e.g., classical and non-classical monocytes). In         IgA, CD14, CD16, and HLADR (Additional file 1: Fig.
+ addition, seven markers (e.g., CD20, HLA-DR, CD37,              S4b-c).
+ CD83, and LAPTM5, CD69, CD78) were selected based
+ on the single-cell data for gene expression validations.
+ The list of all antibodies used in this experiment as well      Processing of genotyping data
+ as their corresponding clone, company, and catalogue            The binary PLINK genotyping files were exported from
+ number are listed in Additional file 2: Table S10. Fro-         the Illumina GenomeStudio software and converted into
+ zen PBMCs were thawed as described, and aliquots of             the VCF format using the PLINK toolkit [39]. The vcftool
+2 × 106 cells were used for antibody staining. In order          program [40] was used to filter out insertions/deletions
+ to optimize the concentration of each antibody in the           (indels), multiallelic SNPs, and sex chromosome vari-
+ panel, a single staining titration experiment with differ-      ants. The hg19 human reference genome was used as a
+ ent concentration of each antibody (1 µl, 2 µl, and 4 µl)       template in vcftools to correct the reference and alterna-
+ was performed using aliquots of 1 × 106 PBMCs derived           tive alleles labels in the VCF file and to phase all geno-
+from a healthy donor. For each antibody, the concentra-          types. The Beagle toolkit [41] was utilized to perform
+ tion at which the signal intensity gained the saturation        the genomic imputation according to the human 1000
+ point was selected as the optimal antibody concentra-           genome reference. The imputed variants with low con-
+ tion per million cells (Additional file 2: Table S10). Except   fidence (R2 < 0.9) were excluded, and the confidently
+ for CCR7 antibody which required a pre-incubation step          imputed variants were concatenated into the genotyped
+ at 37 °C for 10 min, all other antibodies were incubated        variants. The final VCF file comprising genotyped vari-
+ with cells for 30 min at 4 °C. In order to avoid any cross      ations (750k variants) and confidently imputed variants
+ binding between TCR and CD3 antibodies, a sequential            (3.2 million variants) was sorted and used for the demul-
+ staining strategy was applied for these antibodies. After       tiplexing of scRNA-seq data at sample level.
+Honardoost et al. Genome Medicine   (2024) 16:45                                                             Page 5 of 24
+
+
+
+
+Demultiplexing and quality control of scRNA‑seq data           C-monocyte, NC-monocyte, cDCs, pDCs, platelets,
+The overall steps for data processing, quality control,        HSCs) from the Novershtern et al. study [46]; (2) Nover-
+and reference-based clustering of PBMCs (n = 186,671)         shtern T Cell Panel: including 420 feature genes across 6
+are represented in Additional file 1: Fig. S1. The Cell       T sub-populations (i.e., C                ­ D4+ CM, C
+                                                                                         ­ D4+ T naive, C         ­ D4+
+                                                                         +                              +
+Ranger (V2.0) (with hg19 as reference genome) and             EM, ­CD8 T naive, ­           +
+                                                                                       CD8 CM, ­    CD8 EM) from the
+demuxlet tool kits [42] were used to demultiplex paired-       Novershtern et al. study [46]; (3) Monaco TCell Panel:
+end sequencing FASTQ files at the cell and sample level,       including 551 feature genes across 15 T and NK sub-
+respectively. As expected, a total of 28,498 cells (aver-      populations [i.e., ­CD4+ naive, ­CD8+ naive, ­CD8+ CM,
+age doublet rate of 15.2%) were detected as cross-sample      ­CD8+ EM, ­CD8+ T effector (TE), MAIT, NK, T follicu-
+doublets by the demuxlet tool and were removed from           lar helper (TFH), T helper 1 (Th1), Th17, Th1/Th17, Th2,
+the dataset (Additional file 1: Fig. S1b, d). To check the    T-reg, VD2 negative, VD2 positive] from the Monaco, G.,
+fidelity of sample assignment by the Demuxlet, sum of         et al. study [47]; (4) Monaco B Cell Panel: including 436
+average natural logarithm (nlog) expression of Y and X        feature genes across 5 B sub-populations (i.e., B-naive,
+chromosome genes for cells of each sample were calcu-         B non-switch memory (BNSM), BSM, plasmablasts,
+lated and shown in a scatter plot, where each dot rep-        B exhausted (Bex)] from the Monaco, G., et al. study
+resents a sample colored based on the gender status           [47]; (5) Monaco Myeloid Panel: including 775 feature
+obtained from the clinical data. As expected, the cells       genes across 5 myeloid sub-populations (i.e., C-mono-
+from female donors were clearly separated from cells          cyte, I-monocyte, NC-monocyte, pDC, cDC) from the
+from male donors as the former showed negligible (noise-      Monaco, G., et al. study [47]. To perform reference-based
+floor) expression of Y chromosome genes (Additional           clustering supervised by the reference panels, the data-
+file 1: Fig. S1c). Genes with low coverage (expressed in      Project function from the RCA2 package was used to pro-
+less than 0.1% of cells) and cells showing higher than 7%     ject log transformed corrected UMI count of each single
+mitochondrial gene expression were filtered out. Read         cell into each cell type in the immune reference panels by
+counts were normalized and log transformed using the          calculating the Pearson correlation coefficient between
+SCTransform normalization method implemented in               the nlog transformed (SCTransformed normalized cor-
+Seurat package (V3.1) [43]. The RCA2 package [44] was         rected UMI counts) vector from scRNA-seq and log10
+used to perform reference-based clustering of cells into      expression vector from the reference bulk transcriptome
+major immune cell types and apply cluster-specific cell       across feature genes of the reference panel. This function
+filtering based on the distribution of number of detected     generates the correlation coefficient matrix where each
+genes (NODGs) across immune cell types. Accordingly,          row is a cell type in the panel and each column is a sin-
+cells with 750 < NODG < 2500, 750 < NODG < 2750,              gle cell. After raising to the fourth power and row-wised
+and 125 < NODG < 1500 were kept within clusters of            z-transformation, the correlation matrix was used to cal-
+pDCs, HSCs, and platelets, respectively. For rest of RCA      culate the correlation-based distance matrix. Next, the
+clusters, cells with 500 < NODG < 2500 were included.         dataClust function from RCA2 (V2) package, which uses
+A total of 19,508 cells were excluded as noisy cells (dead    the internal dataClust function from fastcluster pack-
+cells, debris, potential undetected doublets) (Additional     age, was used to apply the correlation-based distance
+file 1: Fig. S1a; Methods). After removing potential dou-     matrix into average-linkage hierarchical clustering. It
+blets and low quality compromised cells, the Doublet-         also takes advantage of the cutreeDynamic function from
+Finder package [45] was used to detect and exclude 9498       the WGCNA package to define cell clusters within the
+cells as within-sample doublets (average within-sample        resulting dendrogram. To visualize the correlation-based
+doublet rate of 6.86%), resulting in a final clean QC-        distance matrix in a two-dimensional space, the UMAP
+passed dataset of 129,167 single cells used in the down-      dimensional reduction technique [48] was applied to the
+stream re-clustering, cell type annotation, and cleaning.     correlation-based distance matrix using the computeU-
+                                                              MAP function from the RCA2 package. RCA clusters
+scRNA‑seq clustering and cell type annotation                 were annotated based on their correlation with immune
+Reference-based RCA clustering method supervised by           cell types in each immune panels and expression of the
+a combination of different immune panels from RCA2            canonical markers. Ambiguous RCA clusters with no
+(V2) package [44] was used for clustering of QC-passed        correlation or strong correlation with more than one
+single-cell PBMCs. The details of reference panels used       cell type in the panel were excluded from the dataset.
+in this study are described as follows: (1) Novershtern       First, in order to identify the major immune cell types,
+Panel: including 966 feature genes across 15 PBMC cell        the QC-passed cells were projected into the Novershtern
+types (i.e., ­CD4+ T naive, ­CD4+ TCM, ­CD4+ TEM, ­CD8+       Panel resulting in 9 RCA clusters annotated as ­CD4+ T,
+T naive, C ­ D8+ TCM, C  ­ D8+ TEM, NK, B-naive, B-SM,       ­CD8+ T, NK, B cell, monocyte, pDCs, platelets, HSCs,
+Honardoost et al. Genome Medicine       (2024) 16:45                                                                                      Page 6 of 24
+
+
+
+
+ and erythrocytes (Fig. 1b, middle panel; Additional file 1:                 than 0.25 and FDR q-value less than 0.05 were selected as
+ Fig. S2a). T/NK cells were further clustered into 11 T cell                 the marker genes for each immune cell type.
+ sub-populations by sequential projection into two T cell
+ specific panels. First, T/NK cells were projected into the                  Differential cell composition analysis
+ Monaco T Cell Panel where the cells with strong correla-                    To identify cell composition aberrations with taking into
+ tion with Treg, MAIT, gamma-delta T (VD2P), and NK                          account the effect of independent variables, a multiple
+ cells were annotated accordingly and the remaining cells                    regression analysis based on the general additive model
+ were projected into the Novershtern T Cell Panel result-                    (GAM) was applied using the gam function from the
+ ing in six T sub-populations annotated as ­CD4+ T naive,                    mgcv R package [49]. This model benefits from properties
+­CD4+ CM, C   ­ D4+ EM, ­CD8+ naive, ­CD8+ CM, ­CD8+ EM                      of both generalized linear (GLM) models and additive
+ (Fig. 1b, upper-right panel; Additional file 1: Fig. S2c).                  models [50]. Various independent variables, including
+ B cells were projected into the Monaco B Cell Panel to                      disease status (T1DM = 1, healthy = 0), sex (male = 1,
+ identify and annotate three B sub-populations including                     female = 0), number of T1DM risk HLA haplotypes, and
+ B naive, BSM, and B plasma accordingly (Fig. 1b, upper                      the GADA titer were included into the model to esti-
+ left panel; Additional file 1: Fig. S2d). Likewise, projec-                 mate their effect on predicting the relative proportion
+ tion of the monocyte/pDC cells into the Monaco Myeloid                      of immune cell types (% of PBMC). The regression coef-
+ Panel revealed five myeloid sub-populations including                       ficients were estimated by the model and the F test sta-
+ C-monocyte, I-monocyte, NC-monocyte, cDC, and pDC                           tistics was applied to compute p-values. By default, the
+ (Fig. 1b, lower right panel; Additional file 1: Fig. S2e).                  relative proportion is considered as Gaussian response.
+                                                                             In all analysis, the p-value less than 0.05 was considered
+                                                                             statistically significant.
+Cell composition enrichment analysis at gene expression
+space
+                                                                             Pseudo‑bulk differential gene expression analysis
+To evaluate the enrichment of cells from T1DM patients
+                                                                             The DESeq2 (v.1.30.1) package was used to perform dif-
+in gene expression space across immune cell types, the
+                                                                             ferential gene expression analysis on pseudo-bulk tran-
+nearest 50 neighbor cells around each single cell in the
+                                                                             scriptome profiles of T1DM and healthy samples. First,
+gene expression principal component analysis (PCA)
+                                                                             the pseudo-bulk expression matrices were calculated
+space were collected, and the log2 (fold-change ratio)
+                                                                             by summing UMI counts across cells as suggested by
+of cells from T1DM samples relative to the cells from
+                                                                             DESeq2. The shrunken log2 (fold-change) and standard
+healthy subjects within nearest 50 neighbor cells was
+                                                                             error were measured by the ashr algorithm. Pseudo-bulk
+measured. These values were visualized for each single
+                                                                             samples resulting from summing-up of less than 5 cells as
+cell at the UMAP space.
+                                                                             well as genes that were detected in less than 5% of indi-
+                                                                             viduals were excluded from the analysis. Finally, genes
+Identifying marker genes of PBMCs’ cell types                                with an absolute log2 (fold-change) ≥ log2(1.3) and FDR
+To define the marker genes for each immune cell type                         q-value (Benjamini-Hochberg) ≤ 0.05 were defined as
+compared with rest of the cells, the negative binomial                       DEGs.
+generalized linear model implemented in FindAll-
+marker function from seurat package was used, while                          Pathway enrichment analysis of T1DM‑associated DEGs
+the sequencing library IDs (batch) and the disease sta-                      Both over-representation and gene set enrichment analy-
+tus (healthy/T1DM) were added as variables to regress                        sis (GSEA) were performed using the ClusterProfiler R
+out. Only genes which were detected in at least 25% of                       package [51]. The enrichGO function was used to per-
+the cells in any of the two testing groups were included in                  form the over-representation analysis on the list of DEGs
+the model. Genes with average nlog (fold-change) higher                      from each k-mean cluster with the following settings:
+
+
+
+ (See figure on next page.)
+ Fig. 1 Multi-resolution clustering of PBMCs in T1DM. a Schematic representation of the study design for scRNA-seq and multi-parametric FACS
+ profiling and data analysis of T1DM patients and healthy controls. b UMAP visualization of single cells in gene expression space. Central UMAP plot:
+ low-resolution reference-based clustering to identify the three major immune compartments (T/NK, B, and Mo/DC). Each major cell type was then
+ clustered individually at higher resolution, again using reference panels, to define 22 PBMC cell types. CM, central memory; EM, effector memory;
+ Treg, regulatory T; MAIT, mucosal-associated invariant T; VD2P, gamma-delta T; NK, natural killer; BSM, B switched memory; C-monocyte, I-monocyte,
+ and NC-monocyte: classical, intermediate, and non-classical monocyte; cDC, pDC, conventional, plasmacytoid dendritic cell; HSC, hematopoietic
+ stem cell. c UMAP plot showing fold enrichment of T1DM vs healthy cells at each location in gene expression space. Red, blue: enriched, depleted
+ in T1DM
+Honardoost et al. Genome Medicine        (2024) 16:45   Page 7 of 24
+
+
+
+
+ Fig. 1 (See legend on previous page.)
+Honardoost et al. Genome Medicine   (2024) 16:45                                                                Page 8 of 24
+
+
+
+
+OrgDb = org.Hs.eg.db, ont = “BP,” pAdjustMethod =              healthy donors [18]; and (3) scRNA-seq of macrophages
+“BH,” pvalueCutoff = 0.05, qvalueCutoff = 0.05, minGS-         within human cultured islets isolated from 5 T1DM and
+Size = 10, maxGSSize = 500. To perform GSEA analysis           11 healthy donors [29]. The newGOM function from the
+for each cell type, the gseGO function was applied on the      GeneOverlap package was used to apply the Fisher exact
+list of DEGs ranked by the differential expression score       test and calculate the statistical FDR q-value (Benjamini-
+(DES)      [|log2(Fold − Change)| × −log10(FDRq-value)]        Hochberg) of intersections.
+using the following settings: OrgDb = org.Hs.eg.db, ont
+= “BP,” keyType = “ENTREZID,” pAdjustMethod = “BH,”            TMZ score analysis
+pvalueCutoff = 0.05, exponent = 0, nPerm = 10, 000,            For each cell type, sample-level pseudo-bulk expression
+minGSSize = 15, and maxGSSize = 500. The simplify              of DEGs were z-transformed across samples, and TMZ
+function was used to simplify the enriched terms. The          score was calculated by the following equation:
+top 3 significantly enriched terms (ranked by NES) and
+the cell type-specific terms of each cell type were selected                         zij              zik
+                                                                   TMZi =                 −
+for visualization.                                                           j∈Ui
+                                                                                    �Ui �
+                                                                                              k∈Di
+                                                                                                     �Di �
+
+Single‑cell regulon activity inference and differential          where i is the cell type i. The zij and zik represent the
+regulon activity (DAR) analysis                                expression z-score for genes j and k in cell type i, respec-
+The well-established Single-Cell rEgulatory Network            tively. Finally, Ui and Di indicate the set of upregulated
+Inference and Clustering (SCENIC) algorithm [52] was           and downregulated DEGs in cell type i, respectively. The
+utilized to infer the regulon activity in single-cell PBMCs.   norm notation denotes the size of the set (i.e., the num-
+The SCENIC pipeline with default settings was applied          ber of upregulated or downregulated genes in that cell
+on the whole scRNAseq PBMC dataset and the final               type). Lastly, the average TMZ score is simply the mean
+matrix of 260 inferred regulons (rows) with their cor-         of TMZ score across all cell types.
+responding regulon activity score (RAS) across 117,737
+single cells (columns) was extracted as a Seurat object for    TMZ score validation method
+the downstream analysis. Next, the unpaired Wilcoxon           After TMZ score is calculated as explained, to accom-
+test, implemented in the Seurat FindAllmarker function,        modate calculation of TMZ score for bulk RNA-seq from
+was used to identify the list of marker regulons within        other dataset, DEGs coming from each cell types were
+each immune cell type compared with the rest of the            grouped into 3 major cell types namely, T/NK, B, and
+immune cells. For each cell type, the significant upregu-      monocytes and 3 TMZ scores were created. The set of
+lated regulons [nlog (fold-change) > 0 and FDR q-value         upregulated and downregulated DEGs from each groups
+< 0.05)] were ranked based on their FDR q-values, and          were used to measure the TMZ score for bulk RNA-seq
+the top 5 regulons were selected as the marker regulons        data like in Fig. 5e and Additional file 1: Fig. S7c. Using
+of that cell type. The same approach was used to identify      the predetermined set of genes for each group, the TMZ
+the DARs between T1DM and healthy samples across               scores are calculated on the bulk expression data. Sub-
+immune cell types. Accordingly, within each cell type,         sequently, the retrieved TMZ scores are then quantile
+all significant upregulated [nlog (fold-change) > 0] and       transformed per sample to scale the data to the same dis-
+downregulated [nlog (fold-change) < 0] regulons with           tribution as in the previously calculated TMZ scores in
+FDR q-value ≤ 0.05 were selected as DARs in that cell          our single-cell dataset while preserving its gene expres-
+type and were ranked based on their FDR q-value.               sion ranking. This method of calculation allows for any
+                                                               new genetic information coming from only as few as 1
+Gene overlap analysis                                          sample to have its own TMZ score referenced to our T1D
+The GeneOverlap R package [53] was used to compare             single-cell expression data.
+the level and significance of overlap between upregulated
+and downregulated DEGs of T/NK cells, B cells, and             T1DM GWAS enrichment analysis
+monocytes from the current study with reported DEGs            T1DM GWAS summary statistics fetched from
+from previous RNA-seq profiling studies in T1DM. To            the most recent comprehensive study covering
+do so, first, the list of up and down regulated DEGs was       61,947,369 genetic variants with 37,652,754 single-
+fetched from three studies including (1) longitudinal bulk     nucleotide polymorphism (SNPs) passed the general
+RNA-seq study of FACS-sorted T cells and PBMCs from            QC in 520,580 European samples (T1DM = 18,942;
+seven genetically at-risk case-control pairs at 3, 6, 12,      healthy = 501,638) [54]. T1D-associated DEGs were
+18, 24, and 36 months of age [24]; (2) bulk RNA-seq of         ranked based on differential expression score (DES)
+human pancreatic β cells isolated from 4 T1DM and 12           [|log2(Fold − Change)| × −log10(FDRq-value)]. Genes
+Honardoost et al. Genome Medicine       (2024) 16:45                                                                                      Page 9 of 24
+
+
+
+
+with q-value < 0.1 were filtered out and DES of remain-                      identified and annotated nine high-level cell clusters that
+ing genes were normalized using min-max normalization                        were well separated in gene expression space (Fig. 1b,
+method. Next, for each cell type, the ranked normal-                         middle panel, Additional file 1: Fig. S2a): C  ­ D4+ T, ­CD8+
+ized DES values were inputted into CELLECT tool [55]                          T, NK, B, monocyte/conventional dendritic cells (Mo/
+to quantify their association with T1DM polygenetic                           cDC), plasmacytoid dendritic cells (pDCs), hematopoi-
+GWAS signal (T1DM heritability) using MAGMA covar-                            etic stem cells (HSCs), erythrocytes, and platelets. We
+iate analysis [56] with MAGMA window size = 100 kb.                           excluded the three least abundant clusters (HSC, plate-
+Thereby, CELLECT identified cell types whose DEGs                             let and erythrocyte) and sought to identify sub-popu-
+were significantly correlated with T1DM heritability and                      lations within the abundant cell types by first merging
+genes that were in the top 200 MAGMA-inferred T1DM                            them into three immune compartments: T/NK, B, and
+GWAS genes and top 30 percentile of normalized DES                            Mo/DC (Mo/cDC plus pDC). Then, in a second, high-
+were set to be the definition of effector genes listed in                     resolution round of cell type annotation, we clustered
+Fig. 6b.                                                                      cells from each of the three compartments separately
+                                                                              using additional reference panels (Methods), resulting in
+Results                                                                       a total of 22 cell types, 21 of which could be annotated
+Reference‑based multi‑resolution clustering of PBMCs                          using canonical markers (Fig. 1b; Supp. Fig. Additional
+reveals altered cell populations in T1DM                                      file 1: Fig. S2b-e, i; Methods). All clusters contained cells
+We leveraged the demuxlet protocol for pooled scRNA-                          from all samples and pooled batches, suggesting that the
+seq [42] to profile gene expression in single PBMCs                           clustering was mainly driven by biological differences
+from stage 3 46 T1DM and 33 healthy samples matched                           between cell types rather than batch effects or sample
+for age, gender, and T1DM-associated HLA haplotype                            specificity (Additional file 1: Fig. S2f, g).
+(Fig. 1a). After strict QC to discard low-quality cells and                      Next, we investigated the enrichment of immune cells
+doublets (Methods), we obtained transcriptomic data on                        from T1DM patients relative to healthy controls at each
+117,737 PBMCs. All samples were collected from Euro-                          location in gene expression space (Fig. 1c; Additional
+pean donors at Ulm University Medical Centre [35]                             file 1: Fig. S3a, e, i; Methods). We observed depletion
+(Methods). In brief, PBMC samples from fasting blood                          of Treg and C   ­ D4+ EM cells, as well as enrichment of
+                                                                                    +
+taken from well-controlled insulin-dependent subjects                        ­CD8 naive T cells, C-monocytes, and NC-monocytes in
+with autoimmune diabetes were used in this study. Dis-                        T1DM (Fig. 1c, Additional file 1: Fig. S2h). These results
+ease duration was consistent across the majority of the                       suggest that there could be systematic compositional
+cohort, ranging from 1 to 4 years in 70 percent of sub-                       changes in circulating immune cells in T1DM, particu-
+jects. All T1DM cases were negative for C-peptide and                         larly at the level of cell sub-populations.
+were undergoing insulin treatment. Thus, none of the
+subjects met the criteria for the partial remission (see                     Cell composition changes of peripheral immune cells
+Methods for details of inclusion and exclusion criteria).                    in T1DM
+Detailed clinical information including gender, age at                       To systematically investigate cellular composition aberra-
+blood collection, age at disease onset, GADA titer, and                      tions of peripheral immune cells in T1DM, we used lin-
+T1DM-associated HLA haplotypes is provided in Addi-                          ear multiple regression analysis with sex [58] and number
+tional file 2: Table S1.                                                     of T1DM risk HLA haplotypes as confounders and cell
+  To minimize batch effects in jointly clustering and                        type proportion (% of total PBMCs) as the dependent
+annotating cells, we applied a reference-based cluster-                      variable (Methods).
+ing method, Reference Component Analysis version 2                             First, we examined compositional changes at the lowest
+(RCA2, Methods) [44, 57]. First, using a reference panel                     level of resolution, by focusing on two broad compart-
+of transcriptomes of major immune cell types [46], we                        ments: lymphoid and Mo/cDC (Fig. 2a). Interestingly,
+
+
+
+
+ (See figure on next page.)
+ Fig. 2 Cell composition alterations of peripheral immune cells in T1DM. a Bar plot of coefficients from multiple regression analysis of lymphocyte
+ and Mo/cDC cell proportion (fraction of total PBMCs) against disease status, sex, and number of T1DM risk HLA haplotypes: 46 T1DM and 31 healthy
+ samples. Error bars: standard error. b Same as a, for the 18 most abundant PBMC sub-populations, as well as the proportion ratios C ­ D4+ EM/Treg
+          +
+ and ­CD8 EM/Treg. For easier visualization, the smaller values are multiplied by 10 (indicated with a superscript above the cell type label). c Cell
+ composition changes from an independent multi-parametric FACS study of lymphoid cell types in T1DM [25]. Cell types that showed significant
+ changes in both relative percentage and absolute cell count are shown. P-values from the original study: Mann-Whitney test. d Similar to b,
+ on T1DM subjects alone, with GADA titer included as an additional independent variable. #p ≤ 0.09, *p ≤ 0.05, **p ≤ 0.01, ***p ≤ 0.001
+Honardoost et al. Genome Medicine        (2024) 16:45   Page 10 of 24
+
+
+
+
+ Fig. 2 (See legend on previous page.)
+Honardoost et al. Genome Medicine   (2024) 16:45                                                                  Page 11 of 24
+
+
+
+
+the proportion of Mo/cDC cells increased significantly in         analysis were also supported by an independent multi-
+T1DM, while the proportion of lymphoid cells decreased.           parametric FACS study [25] of B and T lymphocytes in
+Note that these two compartments together account for             T1DM. Consistently again, this study reported signifi-
+the vast majority of PBMCs, and thus one would expect             cant depletion of ­C D4+ early, late, and terminally differ-
+that their relative proportions would shift in opposite           entiated EM (TEMRA) T cells as well as activated Tregs
+directions. The Mo/cDC proportion was also signifi-               (Fig. 2c). Enrichment of ­C D8+ naive T cells in T1DM
+cantly higher in male subjects, independent of T1DM               was also supported. These results from FACS profiling
+status [58].                                                      validate and support our conclusions from scRNA-seq
+   Next, we examined T1DM-associated composition                  that specific peripheral cell proportions are signifi-
+changes at higher resolution, for the 18 most abundant            cantly altered in T1DM. Nevertheless, our scRNA-seq
+PBMC sub-populations (Fig. 2b). Compared to controls,             results encompass a far larger set of markers than can
+we noticed significant aberrations in the proportion              be analyzed using low-plex methods such as FACS.
+of 5 immune cell types. ­CD4+ EM cells were strongly                We then examined the consistency of our results
+depleted in T1DM PBMCs, perhaps due to their recruit-             from single-cell analysis of peripheral immune cells
+ment to the para-pancreatic lymph nodes and pancreatic            with previously reported cell composition changes in
+islets where they are shown to establish immunological            relevant tissues, namely T1DM pancreas and para-pan-
+synapses with antigen presenting cells (i.e., pDCs, B cells,      creatic lymph nodes. In line with our own finding that
+and β cells) and mediate the inflammatory responses               Treg cells were depleted in T1DM peripheral blood,
+against β cells autoantigens [59–61]. Defects in immune           depletion of this cell type was reported as a key feature
+suppressing function of Tregs have been reported in               of para-pancreatic lymph nodes in stage 3 T1DM [63].
+T1DM and other autoimmune disease [62–64]. Consist-               Furthermore, two independent imaging mass cytom-
+ently, our scRNA-seq data revealed significant decrease           etry studies revealed an excess of macrophages in stage
+in relative proportion of Tregs in PBMCs of T1DM                  3 T1DM pancreatic islets, which may relate to the
+patients (Fig. 2b), suggesting that, in addition to func-         excess of circulating C-monocytes and NC-monocytes
+tional changes in Tregs, a reduction in their abundance           observed in our study. In contrast to the depletion of
+could potentially contribute to the loss of peripheral           ­C D4+ EM T cells in circulation, the overlapping ­C D4+
+tolerance in T1DM. Interestingly, in line with previous           helper T cell population was enriched in T1DM islets,
+studies reporting higher ratio of naive/effector T cells          suggesting recruitment of these cells to pancreas in the
+in peripheral blood of T1DM patients [25, 61], we also            disease state [69, 70].
+identified enrichment of C  ­ D8+ naive T cells in PBMCs            We also investigated concordant signatures between
+of T1DM patients (Fig. 2b). This observation supports             PBMC cell composition changes in organ-specific (mani-
+the extensive literature showing a crucial role for ­CD8+         fest T1DM, our study) and systemic autoimmune dis-
+T cells in destructing of βcells during T1DM pathogen-            ease (established systemic lupus erythematosus (SLE))
+esis [61, 65–67]. Finally, we observed a higher proportion        [71]. In both T1DM and SLE, the ratio of lymphocytes
+of C-monocytes and pDCs in peripheral blood of T1DM               to Mo/cDC cells was reduced relative to controls. Along
+patients (Fig. 2b). We note that some of these T1DM-              the same lines, C-monocytes were enriched in both auto-
+associated cell population changes may overlap those              immune diseases (Additional file 1: Fig. S5a). However,
+associated with aging [68].                                       there were also notable differences. For example, C  ­ D4+
+   We also examined the ratio of C   ­ D4+ and ­CD8+ EM           naive T cells were depleted in SLE, whereas we observed
+cells to Treg cells, as a measure of T cell activation. Inter-    depletion of Treg and C  ­ D4+ EM T cells in T1DM. Simi-
+estingly, both ratios were significantly elevated in T1DM         larly, we observed enrichment of ­     CD8+ naive T cells
+(Fig. 2b). Consistent with previous studies [58], sex was         and pDCs in T1DM, but no corresponding shifts were
+again a significant confounding factor for multiple PBMC          observed in SLE. Thus, the systemic shifts in cell com-
+sub-populations. However, the number of HLA risk hap-             position we observed in the organ-specific autoimmune
+lotypes had no significant effect.                                disease T1DM were similar in some respects to, but also
+   Consistently, our multi-parametric FACS profiling of           substantially different from, those seen in SLE.
+190,000 cells from of 10 stage 3 T1DM and 9 healthy                 Next, we analyzed the association of cell composition
+samples (10,000 cells per sample) (Additional file 1: Fig.        in T1DM with sex and two clinical features: number of
+S4a-c; Methods) validated the depletion of C    ­ D4+ T cells     HLA risk haplotypes and GADA titer. We found a posi-
+in T1DM (p-value = 0.037, Additional file 1: Fig. S4d-e).         tive correlation between GADA titer and the proportion
+Likewise, it showed a trend towards higher proportions            of MAIT (p = 0.026) and CD4 TEM cells (p = 0.086),
+of ­C D8+ T and C-monocyte cells (Additional file 1:              suggesting a possible role for these cell types in GAD
+Fig. S4d-e). The cell composition shifts observed in our          autoimmunity (Fig. 2d).
+Honardoost et al. Genome Medicine       (2024) 16:45                                                                                     Page 12 of 24
+
+
+
+
+Cell type‑specific gene expression changes of peripheral                     gene set enrichment analyses (GSEA) of DEGs in each
+immune cells in T1DM                                                         cell type (Methods) highlighted the enrichment of sev-
+To identify transcriptome aberrations in peripheral                          eral overlapping biological terms including “cell activa-
+immune cell types in T1DM, we performed pseudo-                              tion” enriched in upregulated DEGs of most immune
+bulk differential gene expression analysis between the                       cell types and “processing and presentation of peptide
+46 cases and 31 control samples using DEseq2 [72]                            antigens” enriched in up-DEGs of B cells. Furthermore,
+(Methods). Since we observed high overlap between                            we observed significant association of T/NK up-DEGs
+DEGs of naive, CM, and EM T sub-populations within                           with the term “cell migration” (Fig. 3d, Additional file 2:
+­CD4+ T cells (data not shown), we merged these three                        Table S5-S6). These results imply broad immune activa-
+sub-populations into a single ­CD4+ T cluster. The same                      tion responses across PBMC cell lineages. However, the
+approach was used to collapse cell sub-populations                           corresponding sets of DEGs were not entirely the same
+within ­CD8+ T cells. Remarkably, 1784 genes were                            in T/NK, B, and monocyte populations (Additional file 2:
+identified as differentially expressed in at least one cell                  Table S5-S6). These observations may suggest higher
+type (|log2(Fold − Change)| ≥ log2(1.3); FDR q-value                         migratory potential of T/NK cells in T1DM, which may
+≤ 0.1), comprising 1093 upregulated and 691 down-                            explain their active recruitment to the pancreatic islets
+ regulated DEGs (Fig. 3a; Additional file 1: Fig. S3b, f, j;                 and parapancreatic lymph nodes [63, 69, 70].
+ Additional file 1: Fig. S6a; Additional file 2: Table S3).                     Next, we compared systemic transcriptomic aber-
+ Our FACS panel for validating cell composition shifts                       rations in organ-specific (T1DM) and systemic (SLE)
+ included 8 of these DEGs, all of which showed protein                       autoimmune diseases [71]. Interestingly, peripheral lym-
+ expression changes in a direction consistent with tran-                     phoid and myeloid DEGs in T1DM significantly over-
+ scriptome analysis, with 3/8 also showing statistical sig-                  lapped with the corresponding SLE DEGs (Additional
+ nificance (Additional file 1: Fig. S4f ). Interestingly, NK,                file 1: Fig. S5b). These overlapping DEGs imply a shared
+ Treg, ­CD8+ T cells comprised the top three cell types in                   loss of immune cell homeostasis in the two autoimmune
+terms of number of DEGs in T1DM (Fig. 3b), and > 300                         diseases. For example, interferon gamma response genes
+ genes were upregulated in each of these cell types. This                    were enriched in shared up-DEGs of T/NK cells, and
+ indicates long-lasting systemic immune aberrations after                    myeloid cell activation genes were enriched in shared
+ type 1 disease manifestation, most prominently (though                      monocyte up-DEGs (Additional file 1: Fig. S5c, d, Addi-
+ not exclusively) in cytotoxic cells and Treg cells that                     tional file 2: Table S7). However, some functional per-
+ modulate their activity.                                                    turbations appeared to be specific to T1DM up-DEGs,
+   To identify gene modules among T1DM-associated                            such as antigen processing and presentation capacity
+ DEGs, we clustered them by their cell type-specific log2                    by B cells, driven by over-expression of a MHC class II
+ (fold-change) profile using k-means. This yielded 8 major                   cluster including HLA-DM, HLA-DO, HLA-DRB1, HLA-
+ DEG modules, most of which were preferentially altered                      DQB1/HLA-DQA1, CD74, and CTSS [Fig. 3d; Additional
+ in specific cell types. We annotated DEG clusters based                     file 1: Fig. S6b; [71]]. Thus, these results suggest sig-
+ on their most significantly enriched GO terms (Fig. 3c,                     nificant similarities in the systemic immune response in
+ Additional file 2: Table S4) (Methods). Notably, all three                  T1DM and SLE, but also notable differences.
+major cell lineages showed upregulation of the corre-                           We then leveraged the SCENIC algorithm [52] (Meth-
+ sponding activation markers: “T cell activation” in T                       ods) to identify transcription factors (TFs) that may con-
+ cells (cluster 6), “antigen presentation via MHC class II”                  tribute to gene and pathway dysregulation in T1DM. As
+ in B cells (cluster 3), and “activation of innate immune                    a positive control, we first confirmed that the regulons
+ responses” in myeloid cells (cluster 1). Consistently,                      (target genes) of canonical cell type marker TFs were
+
+
+
+ (See figure on next page.)
+ Fig. 3 Cell type-specific gene expression changes in T1DM. a Total number of unique upregulated and downregulated DEGs in 14 peripheral
+ immune cell types: 46 T1DM samples vs. 31 healthy. b Bar plot representing the number of DEGs within each cell type, with colored segments
+ indicating the number of cell types that share the same DEG. c Heatmap of T1DM vs healthy log2 (fold-change) of 1784 DEGs (691 + 1093) across all
+ immune cell types. Genes are clustered by their fold-change vectors using k-means. Each gene cluster is annotated by the most significantly
+ enriched Gene Ontology (GO) term. d Gene set enrichment analysis (GSEA): dot plot of top shared and cell type-specific biological processes
+ enriched in DEGs of each PBMC cell type, colored by normalized enrichment score (NES). Dot size: −log10 (FDR q-value). e Differential regulon
+ activity: heatmap of transcription factor regulons with increased or decreased activity in T1DM (union of top 5 regulons in each of the 13 peripheral
+ immune cell types). Color indicates −log10 (FDR q-value) of regulons upregulated (yellow) and downregulated (purple) in T1DM. f Overlap
+ between GSEA leading-edge genes and significantly differential regulons in 6 peripheral cell types. Color indicates −log10 (FDR q-value) of overlap
+ (Fisher’s exact test)
+Honardoost et al. Genome Medicine        (2024) 16:45   Page 13 of 24
+
+
+
+
+ Fig. 3 (See legend on previous page.)
+Honardoost et al. Genome Medicine       (2024) 16:45                                                                                   Page 14 of 24
+
+
+
+
+upregulated in their corresponding cell types (Additional                   file 2: Table S8). In summary, numerous transcriptome
+file 1: Fig. S6c; Methods). We then identified differentially               aberrations of circulating immune cells in young adults
+active regulons (DARs) in T1DM versus healthy controls                      with T1DM reflect continuation of pathogenic immune
+across the 13 immune cell types (Methods). We detected                      activation processes present at earlier stages of disease
+123 significantly altered regulons (60 up, 63 down; FDR                     development.
+q-value ≤ 0.05) in at least one immune cell type (Addi-                        Next, we asked whether the peripheral gene expression
+tional file 1: Fig. S6d; Additional file 2: Table S9). Notably,             changes in T1DM were also reflected in the affected tis-
+we identified several instances of cell type-specific regu-                 sue, namely pancreatic islet cells [18, 29]. Indeed, T1DM
+lon activation in T1DM: TCF7, LEF1, ETS1, and KLF2                          versus healthy DEGs in pancreatic β cells and pancreatic
+in T/NK cells, MEF2C and PCX5 in B cells, and IRF5 in                       macrophages were highly enriched in peripheral up-
+monocytes (Fig. 3e, orange; Additional file 1: Fig. S3c, g,                 DEGs of all three PBMC lineages (Fig. 4a, b). Consist-
+k). To identify the TFs contributing to dysregulation of                    ently, the DEGs shared by pancreatic β cells and PBMC
+specific functional categories, we intersected the corre-                   were enriched for roles in lymphocyte (e.g., ZFP36L2,
+sponding regulons with leading-edge DEGs of enriched                        HLA-E, ITGB2, LGALS1, TNFRSF1B) and myeloid
+GSEA terms in each immune cell type (Methods). This                         (e.g., CD14, CTSC, LYZ, FGR, LGALS9) cell activa-
+analysis revealed that distinct TFs may drive cell activa-                  tion and antigen presentation by B cells (e.g., CD74 and
+tion in each cell type: TCF7, LEF1, and ETS1 in T/NK                        several HLA genes) (Fig. 4c, orange; Additional file 2:
+cells, IRF5 in monocytes, and PAX5 and MEF2C in B cells                     Table S8). Importantly, 9 of the overlapping genes have
+(Fig. 3f; Additional file 1: Fig. S3d, h, i). Furthermore, we               genetic associations with T1DM risk: GPSM3, HLA-
+identified KLF2 as the master TF driving upregulation                       DMB, HLA-DPA1, HLA-DPB1, HLA-DRA, HLA-DRB1,
+of cell migration genes in T/NK cells (Fig. 3f; Additional                  HLA-F, LST1, RPL41. These results suggest significant
+file 1: Fig. S3d) [73, 74]. Analysis of the signaling path-                 similarity between dysregulated genes and pathways in
+ways upstream of these TFs that orchestrate T1DM-asso-                      circulatory immune cells and pancreatic islets in T1DM
+ciated immune cell phenotypes may reveal new insights                       and support the relevance of systemic immune changes
+into the pathobiology of this autoimmune disease.                           to the pathophysiology of T1DM pancreas.
+
+Overlap with prognostic expression signatures                               Transcriptome aberrations of peripheral immune cells
+and transcriptome changes in T1DM pancreas                                  define clinically relevant T1DM subtypes
+We hypothesized that some of the systemically altered                       We then asked if the expression of T1DM-associated
+immune cell genes in long-term T1DM could be per-                           DEGs could be used to define patient subtypes. First,
+turbed even before disease onset. We therefore exam-                        in each cell type of each sample, we summarized the
+ined prognostic markers of seroconversion and T1DM                          pseudo-bulk expression levels of the corresponding
+onset previously identified in PBMCs of genetically at-                     DEGs into a single TMZ score (Methods). As expected,
+risk infants [24] (Methods). Remarkably, these prognos-                     this score largely segregated cases and controls. Remark-
+tic markers were significantly enriched for overlap with                    ably, despite substantial differences between the 13 cell
+our T/NK up-DEGs (Fig. 4a, b). The overlapping genes                        type-specific DEG sets, the corresponding 13 TMZ score
+were prominently associated with cytokine production                        were highly correlated (Pearson correlation coefficient
+and cytokine-mediated signaling (TXK, HLA-F, ANXA1,                         > 0.9; Additional file 1: Fig. S7a). This result suggests
+IL32, FCER1G, IL7R, CARD8, CPNE1, BTN3A2, and                               that, in any individual sample, the 13 T1DM-associated
+CD8B), suggesting that they may be involved in pro-                         molecular programs are activated to approximately the
+duction and secretion of inflammatory cytokines by T/                       same extent (after z-score normalization). Thus, all 13
+NK cells in the pre-disease state (Fig. 4c; Additional                      cell types are equally indicative of the strength of the
+
+
+
+ (See figure on next page.)
+ Fig. 4 Overlap with prognostic expression signature and transcriptome changes in T1DM pancreas. a Overlap between T1DM versus healthy
+ DEGs in PBMC cell types (this study) and prognostic markers and DEGs identified in other T1DM studies. Kallionpaa et al.: prognostic markers
+ of seroconversion and T1DM onset. Russell et al., Fasolino et al.: T1DM versus healthy DEGs in primary pancreatic β cells, cultured pancreatic
+ macrophages. Statistical significance of overlap [Fisher’s exact test, −log10 (FDR q-value)] is indicated, with number of overlapping genes
+ in parentheses. b Gene Ontology (GO) enrichment analysis: dot plot of biological processes enriched in overlapping up-DEGs in a colored
+ by −log10 (FDR q-value). T/NK::SeroConv: T/NK DEGs that overlap prognostic markers of seroconversion in T cells or PBMCs (n = 20); T1DM onset:
+ union of prognostic markers of T1DM onset in T cell and PBMCs; PanBeta: DEGs of pancreatic β cells; PanMac: DEGs of pancreatic macrophages. Dot
+ size: percentage of total DEGs in the given GO term. c Heatmap of differential expression (DE) scores [|log2(Fold − Change)| × −log10(FDRq-value)]
+ for union of overlapping up-DEGs in a. DEGs are clustered by k-means into seven clusters (C1-7)
+Honardoost et al. Genome Medicine        (2024) 16:45   Page 15 of 24
+
+
+
+
+ Fig. 4 (See legend on previous page.)
+Honardoost et al. Genome Medicine       (2024) 16:45                                                                                   Page 16 of 24
+
+
+
+
+systemic immune alteration in T1DM. We then clustered                       may have relatively low systemic immune response,
+samples by their 13-dimensional TMZ score vectors into                      towards the upper end of healthy range (Fig. 5a). On
+three groups to define molecular subtypes of T1DM rep-                      the other hand, the intermediate- and high-responding
+resenting high, intermediate, and low systemic immune                       subtypes were almost exclusively T1DM cases (33/35).
+response, respectively (Fig. 5a).                                           Of note, the high-response group included one healthy
+  As expected, almost all healthy controls (29/31)                          control participant (Fig. 5a, red box). Remarkably, this
+belonged to the low-response T1DM subtype. Intrigu-                         participant was subsequently diagnosed with T1DM, 4
+ingly, 13/46 T1DM cases were also assigned to the same                      years after blood collection. Although anecdotal, this
+subtype suggesting that a subset of diagnosed individuals                   observation raises the possibility that systemic immune
+
+
+
+
+ Fig. 5 Transcriptome aberrations of peripheral immune cells define T1DM endotype. a TMZ score summarizing pseudo-bulk expression
+ of T1DM-associated DEGs in each of 13 immune cell types: 46 T1DM and 31 Healthy. Samples were clustered by their TMZ score profiles using
+ k-means. Missing values indicate insufficient cell count. b Bar plot of coefficients from multiple regression analysis of TMZ score against gender,
+ GADA titer, and number of T1DM risk HLA haplotypes: 46 T1DM samples. Cell types avg: average of z-score across all cell types. Error bars: standard
+ error. c Scatterplot showing the association of TMZ score with GADA titer across 46 T1DM samples. p-value: Spearman rank correlation. d Box plot
+ representing TMZ score variation within each T1DM risk haplotype category. p-value: Kruskal-Wallis one-way ANOVA. e Effect of verapamil treatment
+ [75] for 24 h versus untreated controls on TMZ score of human cultured islets. p-value: paired t-test. b, e #p ≤ 0.1, *p ≤ 0.05, **p ≤ 0.01
+Honardoost et al. Genome Medicine       (2024) 16:45                                                                                   Page 17 of 24
+
+
+
+
+alterations may precede the development of insulin-                         monitor drug response in pre-clinical and clinical T1DM
+dependence. Overall, these results suggest that T1DM                        studies and also as a readout in high-throughput screens.
+associated DEGs of peripheral immune cells could be
+used to define molecular subtypes of T1DM.                                  Cell type‑specific DEGs enriched for T1DM genetic risk
+  Next, we asked if the observed variation in TMZ score                     It is possible that some of the systemic immune DEGs
+across patients could be associated with two widely used                    detected in our single-cell analysis could be a conse-
+clinical parameters: the number of T1DM risk haplo-                         quence of chronic hyperglycemia, rather than linked
+types and GADA titer. Multiple linear regression analysis                   to stage 3 T1DM. To prioritize cell types whose differ-
+(Methods) revealed significant association of GADA titer                    ential expression associates with disease causation, we
+as well as T1DM risk HLA haplotypes with TMZ score                          used the CELLECT tool [55] to correlate the T1DM risk
+(Fig. 5b–d; Additional file 1: Fig. S7b). However, when                     scores of genes (inferred from GWAS summary statistics
+we included age at diagnosis as an additional independ-                     [52]) with their cell type specific differential expression
+ent variable in the regression model for TMZ score, we                      in T1DM versus healthy (Methods). This analysis high-
+did not find any significant association with this covariate                lighted DEGs in adaptive immune cell types as signifi-
+(Additional file 1: Fig. S7b). This result could potentially                cantly enriched for T1DM genetic risk. DEGs in B naive
+be attributable to the fact that subjects with early onset                  cells showed the highest association with T1DM herit-
+T1DM (onset below 13 years) represented only a minor-                       ability, driven almost exclusively by multiple risk variants
+ity of our cohort (14/46, 30%).                                             of strong effect in the HLA locus (Fig. 6a upper panel, b).
+  Encouraged by the correspondence to clinical param-                       This result indicates the crucial role of antigen presenta-
+eters, we asked if the TMZ score could be perturbed by                      tion by B cells in T1DM pathogenesis [80].
+treatment with immunomodulatory drugs in a non-anti-                           To identify cell types associated with T1DM genetic
+gen-specific manner. Specifically, we hypothesized that                     risk in the rest of genome, we excluded the HLA locus
+these drugs may reduce the TMZ score, i.e., they could                      and repeated the CELLECT analysis. In this case, DEGs
+move the immune profile of afflicted individuals closer                     in effector T cells ­(CD8+ T, MAIT, and VD2p) emerged
+to that of healthy controls. To test this hypothesis, we                    as significantly enriched for T1DM heritability: PTPN22,
+calculated TMZ score using bulk PBMCs transcriptome                         KLRG1, ICAM3, CLECC2D, CDC37, CD69, CD3G, and
+data from clinical trials for three drugs, namely tepli-                    IL7R (Fig. 6a lower panel, b). This result strengthens the
+zumab (anti-CD3) [76], abatacept (CTLA4 ig) [77], and                       evidence for the pathogenic role of effector T cells in
+rituximab (anti-CD20) [78] (Methods). In addition, we                       T1DM [10, 60, 65–67, 81].
+examined bulk transcriptome data from cultured pan-                            Also, we observed that 9 of the cell type-specific
+creatic islets treated with verapamil [75, 79], relative to                 DEGs in T1DM GWAS loci belong to cell type-specific
+untreated controls. Verapamil, a drug that improved                         regulons driving upregulation of cell activation or cell
+mixed-meal-stimulated C-peptide area under the curve                        migration genes displayed in Fig. 3f (Fig. 6b). These con-
+and reduced the insulin requirement in a phase II trial                     nections suggest that some of the genes influenced by
+[79], also reduced the TMZ score based on monocyte                          T1DM-causing genetic variants may also be perturbed at
+DEGs and had a marginally significant effect on the                         the regulon level. In other words, these genes may repre-
+overall TMZ score (Fig. 5e; Additional file 1: Fig. S7c-e).                 sent convergence of cis- and trans-regulatory alterations
+While teplizumab had no detectable influence on the                         at certain gene loci in T1DM.
+TMZ score, long-term treatment with abatacept, a drug                          Taken together, our GWAS integrative analysis high-
+designed to suppress T cell response, reduced the T/                        lights candidate cell types and corresponding DEGs that
+NK cell TMZ score. Rituximab, a drug targeting B cells,                     may mediate T1DM genetic risk in HLA and non-HLA
+strongly reduced the B cell TMZ score on day 26, 4 days                     loci. These genes could be targeted for functional assays
+after the last dose was administered. These results sug-                    in the corresponding cell types to investigate molecular
+gest that the TMZ score could potentially be used to                        mechanisms of T1DM pathogenesis.
+
+
+
+
+ (See figure on next page.)
+ Fig. 6 Cell type-specific DEGs enriched for T1DM genetic risk. a Significance of association between cell type-specific DEGs and T1DM risk loci.
+ Upper panel: entire genome, lower panel: non-HLA loci. FDR q-values: Benjamini-Hochberg correction. b Heatmap of cell type-specific differential
+ expression score (DES) of genes in T1DM GWAS loci. Gene within the upper 30th percentile of DES that also rank within top 200 in the genome
+ by T1DM genetic risk score are shown. Genetic risk scores [−log10 (MAGMA p-value)] of individual genes are shown by the bar plot on the right.
+ Black: DEGs, gray: upstream transcription factors inferred by regulon analysis
+Honardoost et al. Genome Medicine        (2024) 16:45   Page 18 of 24
+
+
+
+
+ Fig. 6 (See legend on previous page.)
+Honardoost et al. Genome Medicine   (2024) 16:45                                                                Page 19 of 24
+
+
+
+
+Discussion                                                    systemic immunopathology and functional impairment
+We have constructed a cohort-scale single data set of         in additional organs besides the pancreas.
+peripheral immune cell states in T1DM as a resource             Despite substantial overlaps between peripheral
+to characterize systemic immune dysregulation in this         immune changes in T1DM and SLE, perturbation of
+prototypic endocrine organ-specific autoimmune dis-           antigen presentation by B cells (upregulation of MHC
+ease. A key strength of our study is the use of single-       class II antigen/peptide presentation genes including
+cell transcriptome profiling of an autoimmune disease         HLA-DR and -DQ), was specific to T1DM (Fig. 3d; Addi-
+cohort, which provided sufficient resolution to detect        tional file 1: Fig. S6b; [71]). In type 1 diabetes, it is well
+cell type-specific molecular traits associated with           known that autoantigen presentation to CD4(+) T cells
+T1DM. This approach also facilitated cross-validation         via MHC class II molecules plays a key role in the dis-
+of our results with T1DM markers found in diseased            ease process [94–97]. This finding adds to the evidence
+pancreatic tissue as well as circulating markers from         from non-obese diabetic (NOD) mice [80, 98] supporting
+single-cell analysis of SLE. Nevertheless, our study has      a key role for B cells as antigen presenting cells (APCs) in
+some limitations. Firstly, this has been a cross-sectional    T1DM. Similarly, upregulation of cell migration genes in
+study covering Stage 3 T1DM only. However, we note            T/NK cells appears to be specific to T1DM (Fig. 3d; [71]).
+that the cross-sectional markers we identified from           These results indicate qualitative differences between the
+single-cell analysis showed significant overlap with pre-     systemic components of T1DM and SLE, and suggest
+viously detected prognostic markers. Secondly, we did         that broader characterization of the peripheral immune
+not address signatures of auto-reactive T and B cells in      aberrations of diverse autoimmune diseases could lead to
+T1DM.                                                         new molecular assays for diagnosis and clinical monitor-
+  In this study we detected a large number of DEGs            ing. For instance, our T1DM-associated DEGs included a
+between T1DM and control PBMCs (1784 DEGs across              significant number of known prognostic markers of sero-
+13 cell types), indicating profound systemic immune           conversion and T1DM disease onset (Fig. 4a, c).
+aberrations in this organ-specific autoimmune disease           Remarkably, we observed significant overlap between
+(Fig. 3a, b). Remarkably, this was almost six-fold larger     the transcriptome aberrations of peripheral immune
+than the DEG set detected by scRNA-seq in the systemic        cells and those observed in pancreatic β cells and mac-
+autoimmune disease SLE (302 DEGs across 11 immune             rophages in T1DM (Fig. 4a, c). This result suggests sig-
+cell types, [71]). This increase could reflect an unex-       nificant sharing of molecular mechanisms between
+pectedly large systemic dimension to T1DM. We also            peripheral immune cells and the relevant target tissue(s)
+identified substantial overlap in transcriptome changes       [99]. Thus, our results provide further motivation for
+between T1DM and SLE, including shared upregulation           developing therapeutic strategies aimed at reversing the
+of cell activation genes in lymphoid and myeloid line-        pathology of both pancreatic beta cells and circulating
+ages [82–84]. This may further support the notion of a        immune cells in T1DM [99–101].
+major systemic dimension to T1DM. These findings are            Regulon analysis highlighted candidate master TFs
+in line with the observation that individuals diagnosed       driving cell type-specific changes in key functional pro-
+with T1DM are at greater risk of subsequently develop-        grams in T1DM (Fig. 3e, f ). Multiple lines of evidence
+ing other autoimmune diseases such as celiac disease          support a role for these TFs in the pathophysiology of
+(small intestine) [85, 86], autoimmune gastritis [87, 88],    the corresponding cell types. For example, the WNT-
+autoimmune adrenalitis (Addison’s disease) [89], and          pathway mediators TCF7 and LEF1, which we identified
+quite common autoimmune thyroiditis (thyroid) [90, 91].       as drivers of T/NK cell activation, are known to play a
+The negative clinical impact of the persistence of such       key role in maintenance of a Th17 stem-like population
+immune cell changes is also evident as recurrent autoim-      which can either give rise to effector Th17 cells or differ-
+munity after pancreas or islet cell transplantation [92].     entiate into highly tissue destructive Th17/Th1-like cells
+Immunosuppression is thus required to control immedi-         [10, 81, 102]. In addition, we identified IRF5 as a poten-
+ate (re)activation of autoreactivity. Along the same lines,   tial driver of monocyte hyperactivation in T1DM. Con-
+a large population-scale analysis showed that persistent      sistently, genetic variants in this locus are associated with
+immune activation and/or low-grade inflammation in            hyper-activation and functional aberrations of mono-
+T1DM appears to substantially increase the risk of car-       cytes in T1DM and other systemic autoimmune disease
+diovascular disease in autoimmune diabetes subjects           such as SLE and Sjögren’s syndrome [103–106]. Lastly,
+(hazard ratio:2.36), to a similar extent as SLE (hazard       our results indicate that MEF2C, a TF necessary for B cell
+ratio:2.82) [93]. Our results, taken together with these      survival and proliferation upon stimulation of antigen
+epidemiological findings, make a case for expanding the       receptor [107] may also drive the abovementioned upreg-
+scope of mechanistic studies of T1DM by examining             ulation of antigen presentation genes in B cells. Targeting
+Honardoost et al. Genome Medicine   (2024) 16:45                                                                     Page 20 of 24
+
+
+
+
+WNT [108, 109], interferon [110, 111], or other signaling      increase in the number of differentially expressed genes
+pathways mediated by the identified master TFs could           (DEGs) compared to systemic lupus erythematosus
+represent a promising avenue for therapeutics develop-         (SLE). The observed transcriptome changes in periph-
+ment in T1DM.                                                  eral immune cells also exhibit significant overlap with
+  A key observation from our data is substantial het-          those in pancreatic β cells and macrophages, underscor-
+erogeneity across patients in the degree of T1DM-asso-         ing shared molecular mechanisms and offering insights
+ciated transcriptomic change (TMZ score). The clinical         for therapeutic strategies targeting both tissues. Moreo-
+relevance of this heterogeneity is supported by the fact       ver, our study introduces the T1DM-associated tran-
+that the TMZ score showed significant correlation with         scriptomic change (TMZ) score as a potential readout
+GADA titer and number of HLA risk haplotypes, both             for high-throughput screens and an indicator of treat-
+of which are commonly used to infer disease risk [17, 19,      ment response. We demonstrate substantial heterogene-
+21] (Fig. 5). We therefore used the TMZ score to classify      ity in T1DM-associated transcriptomic changes across
+participants into high, intermediate, and low immune-          patients, as reflected in the TMZ score, which corre-
+responding molecular subtypes. As evidence for the             lates with disease risk indicators and provides a basis for
+relevance of this classification, the lone healthy subject     patient stratification.
+assigned to the “high” subtype developed T1DM subse-             While our dataset significantly contributes to under-
+quently, 4 years after blood sampling. Lastly, analysis of     standing systemic immunopathology in T1DM, we
+transcriptomic response to drug treatment in vitro and in      acknowledge its limitations, particularly the exclusion
+clinical trials revealed reductions in the TMZ score that      of the entire spectrum of autoimmune diabetes subtypes
+were consistent with the mechanism of action and clini-        and the absence of stimulated C-peptide quantification.
+cal response (Fig. 5e; Additional file 1: Fig. S7c-e). These   Future studies addressing these limitations in larger and
+results lay a foundation for further studies of the TMZ        more diverse cohorts will enhance our understanding of
+score as a readout in high-throughput screens, as a tool       autoimmune diabetes dynamics over time.
+for T1DM patient stratification, and as an indicator of
+                                                               Abbreviations
+treatment response.                                            ANXA1	Annexin A1
+  It should be noted that our dataset does not encompass       APCs	Antigen presenting cells
+the entire spectrum of autoimmune diabetes subtypes or         BTN3A2	Butyrophilin subfamily 3 member A2
+                                                               CARD8	Caspase recruitment domain family member 8
+endotypes (young-onset T1DM, adult-onset T1DM, as              CD8B	CD8 subunit beta
+well as latent autoimmune diabetes of adults and other         CDC37	Cell division cycle 37
+potential variants). Recognizing this limitation is crucial    CD3G	CD3 gamma subunit
+                                                               CLECC2D	C-type lectin domain family 2 member D
+for a nuanced understanding of autoimmune diabetes             CPNE1	Copine 1
+and its various manifestations, emphasizing the need for       CTSC	Cathepsin C
+future studies in a larger cohort, across a range of dis-      CTSS	Cathepsin S
+                                                               DEGs	Differentially expressed gene
+ease durations, to examine the temporal dynamics of this       DARs	Differentially active regulons
+signature.                                                     ETS1	ETS proto-oncogene 1
+  An additional constraint inherent in our study pertains      FCER1G	Fc epsilon receptor Ig
+                                                               FDR	First-degree relatives
+to the absence of quantification of stimulated C-peptide       FGR	FGR proto-oncogene, Src family tyrosine kinase
+levels in patients, thereby precluding the definitive exclu-   GAD-65	Glutamic acid decarboxylase 65-kilodalton isoform
+sion of individuals identified as micro-secretors with         GADA	GAD autoantibody
+                                                               GP	General population
+retained C-peptide. We did, however, exclude T1D sub-          GPSM3	G protein signaling modulator 3
+jects with a “positive” fasting C-peptide level. We note       GSEA	Gene set enrichment analysis
+that the sensitivity of the C-peptide assay does not com-      HLA	Human leukocyte antigen
+                                                               IA-2A	Insulinoma-associated-2 autoantibodies
+promise the substantive findings and primary conclu-           ICAM3	Intercellular adhesion molecule 3
+sions derived from our investigation.                          IL32	Interleukin 32
+                                                               IL7R	Interleukin 7 receptor
+                                                               IRF5	Interferon regulatory factor 5
+Conclusions                                                    ITGB2	Integrin subunit beta 2
+In summary, our study provides a comprehensive char-           KLF2	Krüppel-like factor 2
+acterization of systemic immune dysregulation in type 1        KLRG1	Killer cell lectin like receptor G1
+                                                               LEF1	Lymphoid enhancer-binding factor 1
+diabetes mellitus (T1DM) by constructing a large-scale         LGALS1	Galectin 1
+single-cell dataset of peripheral immune cell states. Our      LGALS9	Galectin 9
+findings reveal profound systemic immune aberrations           LYZ	Lysozyme
+                                                               MEF2C	Myocyte enhancer factor 2C
+in T1DM, suggesting an unexpectedly large systemic             (NOD	Non-obese diabetic
+dimension to the disease, with a remarkable six-fold           PAX5	Paired box 5
+Honardoost et al. Genome Medicine             (2024) 16:45                                                                                             Page 21 of 24
+
+
+
+
+PBMCs	Peripheral blood mononuclear cells                                            processed single cell count expression matrix is publicly available through
+PTPN22	Protein tyrosine phosphatase non-receptor type 22                            Synapse under the accession code syn53641849 [https://​www.​synap​se.​org/#​
+QC	Quality control                                                                  !Synap​se:​syn53​641849].
+scRNA-seq:)	Single-cell RNA sequencing                                               No custom code was used for any aspect of data processing or analysis in
+(SLE	Systemic lupus erythematosus                                                   this study. All tools and packages used for data analysis in this study were
+TCF7	Transcription factor 7                                                         published and are cited either in the main text or “Methods” section. Detailed
+T1DM	Type 1 diabetes mellitus                                                       data analysis procedures are described in the Methods section.
+TMZ	T1DM metagene z-score
+TNFRSF1B	TNF receptor superfamily member 1B
+TFs	Transcription factor                                                            Declarations
+TXK	TXK tyrosine kinase
+ZFP36L2	ZFP36 ring finger protein like 2                                            Ethics approval and consent to participate
+                                                                                     This research project has undergone review and has been granted ethical
+                                                                                     approval by the Institutional Review Board (IRB) at the Division of Endocrinol-
+Supplementary Information                                                            ogy and Diabetes in Ulm University, Germany (Reference no. 299604393R). The
+The online version contains supplementary material available at https://​doi.​       research conformed to the principles of the Helsinki Declaration. As part of
+org/​10.​1186/​s13073-​024-​01300-z.                                                 our commitment to protecting the rights and welfare of human participants
+                                                                                     involved in this study, informed consent was obtained from each participant
+                                                                                     prior to their participation. To ensure the confidentiality of participants’ data,
+  Additional file 1: Figure S1. Computational workflow for data analysis             all collected information were treated with the utmost confidentiality and
+  and demuxlet quality control. Figure S2. RCA Clustering and annotation             stored securely. Personal identifiers were removed or replaced with unique
+  of 21 immune cell types. Figure S3. Illustration of T1DM and healthy cells,        codes to protect the participants’ identities.
+  up/down-DEGs, and corresponding regulons/pathways in the UMAP
+  representation of gene expression space. Figure S4. Multi-parametric               Consent for publication
+  FACS symphony validated the cellular and molecular aberrations in T1DM             Informed consent was obtained from each participant prior to their participa-
+  patients. Figure S5. Comparison of cellular and molecular changes in               tion to publish all patient-related information that could potentially identify
+  peripheral immune cells of SLE and T1DM versus healthy. Figure S6. Dif-            the individuals involved in this study.
+  ferential gene/regulon expression analysis in T1DM patients compared
+  with healthy controls across 13 immune cell types. Figure S7. Associa-             Competing interests
+  tion of TMZ score of peripheral immune cells with clinical features and            The authors declare no competing interests.
+  response to immunotherapy in T1DM patients.
+  Additional file 2: Table S1. Clinical information of samples used for              Author details
+                                                                                     1
+  scRNA-seq. Table S2. Clinical information of samples used for FACS sym-              Laboratory of Systems Biology and Data Analytics, Genome Institute
+  phony. Table S3. Cell type-specific T1D DEGs. Table S4. Gene Ontology              of Singapore (GIS), A*STAR (Agency for Science, Technology and Research),
+  (GO) over-representaion results of T1D DEGs modules. Table S5. GSEA                Singapore 138672, Singapore. 2 Cardiovascular Diseases Translational Research
+  results of T1D DEGs across 13 immune cell types. Table S6. Filtered GSEA           Program, Yong Loo Lin School of Medicine, National University of Singapore,
+  results (cell type-specific and top three GO terms in each cell types).            Singapore 117599, Singapore. 3 School of Public Health and Preventive Medi-
+  Table S7. GO over-representaion results of T1D and SLE overlaping PBMC             cine, Monash University, Melbourne, Australia. 4 Integrated genomics platform,
+  DEGs. Table S8. GO over-representaion results of overlaping T1D up-DEGs            Genome Institute of Singapore (GIS), A*STAR (Agency for Science, Technol-
+  with prognostic expression signatures and transcriptome changes in                 ogy and Research), Singapore 138672, Singapore. 5 Singapore Immunology
+  T1D pancreas. Table S9. Cell type-specific T1D DARs. Table S10. List of            Network (SIgN), A*STAR (Agency for Science, Technology and Research),
+  antibodies used in this study.                                                     Singapore 138648, Singapore. 6 Institute of Molecular and Cell Biology (IMCB),
+                                                                                     A*STAR (Agency for Science, Technology and Research), Singapore 138673,
+                                                                                     Singapore. 7 Genome Institute of Singapore (GIS), A*STAR (Agency for Science,
+Acknowledgements                                                                     Technology and Research), Singapore 138672, Singapore. 8 Lee Kong Chian
+We are deeply grateful to the participants of the Ulm T1DM Biobank study for         School of Medicine, Nanyang Technological University, Singapore 308232,
+their contribution to our work.                                                      Singapore. 9 Faculty of Life Sciences and Medicine, King’s College London,
+                                                                                     London WC2R 2LS, UK. 10 Cancer Science Institute of Singapore, National
+Authors’ contributions                                                               University of Singapore, Singapore, Republic of Singapore.
+MAH conceived the project including the study design, generation of
+scRNA-seq data, experiments and validation, data analysis, and writing of the        Received: 5 August 2023 Accepted: 30 January 2024
+original draft; AA, FS, BR, IJ, and QXXL assisted with the data analysis; MG, NAR,
+MGL, and DR assisted with the experiments and validation; SQM and CCK
+contributed to the generation and management of genotyping data; YYH and
+AL contributed to the generation and management of FACS data; BB assisted
+with the management of clinical data and specimens; SP provided resources            References
+and consultation; RF, BB, and SP jointly supervised the project. All authors read      1. Katsarou A, Gudbjörnsdottir S, Rawshani A, Dabelea D, Bonifacio E,
+and approved the final manuscript.                                                         Anderson BJ, et al. Type 1 diabetes mellitus. Nat Reviews Dis Primers.
+                                                                                           2017;3(1):1–7.
+Funding                                                                                2. Battaglia M, Ahmed S, Anderson MS, Atkinson MA, Becker D, Bingley
+This work was funded and supported by the following grants: Grant No.                      PJ, et al. Introducing the endotype concept to address the chal-
+H18/01/a0/020 from Agency for Science, Technology and Research, Singapore;                 lenge of disease heterogeneity in type 1 diabetes. Diabetes Care.
+Grant No. 573312 from Simons Foundation Autism Research Initiative (SFARI);                2020;43(1):5–12.
+and Grant No. OFIRG21jun-0090 from National Medical Research Council,                  3. Greenbaum C, VanBuecken D, Lord S. Disease-modifying therapies
+Singapore.                                                                                 in type 1 diabetes: a look into the future of diabetes practice. Drugs.
+                                                                                           2019;79(1):43–61.
+Availability of data and materials                                                     4. Lehuen A, Diana J, Zaccone P, Cooke A. Immune cell crosstalk in type 1
+The raw scRNA-seq and snp-array genotyping data are available in the                       diabetes. Nat Rev Immunol. 2010;10(7):501–13.
+European Genome-phenome Archive (EGA) database and will be acces-                      5. Eizirik DL, Szymczak F, Alvelos MI, Martin F. From pancreatic β-cell
+sible upon reasonable request and approval of all authors (accession code                  gene networks to novel therapies for type 1 diabetes. Diabetes.
+EGAS50000000231) [https://​ega-​archi​ve.​org/​studi​es/​EGAS5​00000​00231]. The           2021;70(9):1915–25.
+Honardoost et al. Genome Medicine          (2024) 16:45                                                                                           Page 22 of 24
+
+
+
+
+  6. Mehdi AM, Hamilton-Williams EE, Cristino A, Ziegler A, Bonifacio E, Le           7 years lie near candidate genes that function in the immune system
+     Cao KA, et al. A peripheral blood transcriptomic signature predicts              and in pancreatic β-cells. Diabetes Care. 2020;43(1):169–77.
+     autoantibody development in infants at risk of type 1 diabetes. JCI        28.   Harsunen M, Kettunen JL, Härkönen T, Dwivedi O, Lehtovirta M,
+     Insight. 2018;3(5):e98212.                                                       Vähäsalo P, et al. Identification of monogenic variants in more than
+  7. Kallionpää H, Elo LL, Laajala E, Mykkänen J, Ricaño-Ponce I, Vaarma M,           ten per cent of children without type 1 diabetes-related autoan-
+     et al. Innate immune activity is detected prior to seroconversion in             tibodies at diagnosis in the Finnish Pediatric Diabetes Register.
+     children with HLA-conferred type 1 diabetes susceptibility. Diabetes.            Diabetologia. 2023;66(3):438–49.
+     2014;63(7):2402–14.                                                        29.   Fasolino M, Schwartz GW, Patil AR, Mongia A, Golson ML, Wang
+  8. Cabrera SM, Chen YG, Hagopian WA, Hessner MJ. Blood-based signa-                 YJ, et al. Single-cell multi-omics analysis of human pancreatic
+     tures in type 1 diabetes. Diabetologia. 2016;59(3):414–25.                       islets reveals novel cellular states in type 1 diabetes. Nat Metab.
+  9. Xhonneux LP, Knight O, Lernmark Å, Bonifacio E, Hagopian WA,                     2022;4(2):284–99.
+     Rewers MJ, et al. Transcriptional networks in at-risk individuals          30.   Howson JM, Rosinger S, Smyth DJ, Boehm BO, study group AE, Todd
+     identify signatures of type 1 diabetes progression. Sci Transl Med.              JA. Genetic analysis of adult-onset autoimmune diabetes. Diabetes.
+     2021;13(587):eabd5666.                                                           2011;60(10):2645–53.
+ 10. Walker LS, von Herrath M. CD4 T cell differentiation in type 1 diabetes.   31.   Ong Y, Koh W, Ng M, Tam ZY, Lim S, Boehm BO, et al. Glutamic
+     Clin Exp Immunol. 2016;183(1):16–29.                                             acid decarboxylase and islet antigen 2 antibody profiles in people
+ 11. Danke NA, Koelle DM, Yee C, Beheray S, Kwok WW. Autoreactive T cells             with adult-onset diabetes mellitus: a comparison between mixed
+     in healthy individuals. J Immunol. 2004;172(10):5967–72.                         ethnic populations in Singapore and Germany. Diabet Med.
+ 12. Kurien M, Mollazadegan K, Sanders DS, Ludvigsson JF. Celiac disease              2017;34(8):1145–53.
+     increases risk of thyroid disease in patients with type 1 diabetes: a      32.   Dimitrov S, Benedict C, Heutling D, Westermann J, Born J, Lange T.
+     nationwide cohort study. Diabetes Care. 2016;39(3):371–5.                        Cortisol and epinephrine control opposing circadian rhythms in T
+ 13. Farh KKH, Marson A, Zhu J, Kleinewietfeld M, Housley WJ, Beik S, et al.          cell subsets. Blood J Am Soc Hematol. 2009;113(21):5134–43.
+     Genetic and epigenetic fine mapping of causal autoimmune disease           33.   Dimitrov S, Lange T, Nohroudi K, Born J. Number and function of
+     variants. Nature. 2015;518(7539):337–43.                                         circulating human antigen presenting cells regulated by sleep. Sleep.
+ 14. Parker SC, Stitzel ML, Taylor DL, Orozco JM, Erdos MR, Akiyama JA,               2007;30(4):401–11.
+     et al. Chromatin stretch enhancer states drive cell-specific gene          34.   Kronfol Z, Nair M, Zhang Q, Hill EE, Brown MB. Circadian immune
+     regulation and harbor human disease risk variants. Proc Natl Acad Sci.           measures in healthy volunteers: relationship to hypothalamic-
+     2013;110(44):17921–6.                                                            pituitary-adrenal axis hormones and sympathetic neurotransmitters.
+ 15. Watanabe K, Mirkov MU, de Leeuw CA, van den Heuvel MP, Posthuma                  Psychosom Med. 1997;59(1):42–50.
+     D. Genetic mapping of cell type specificity for complex traits. Nat Com-   35.   Rosinger S, Nutland S, Mickelson E, Varney MD, Boehm BO, Olsem GJ,
+     mun. 2019;10(1):1–13.                                                            et al. Collection and processing of whole blood for transformation of
+ 16. Zhu Z, Zhang F, Hu H, Bakshi A, Robinson MR, Powell JE, et al. Integra-          peripheral blood mononuclear cells and extraction of DNA: the Type
+     tion of summary data from GWAS and eQTL studies predicts complex                 1 Diabetes Genetics Consortium. Clin Trials. 2010;7(1_suppl):S65–74.
+     trait gene targets. Nat Genet. 2016;48(5):481–7.                           36.   Kimura A, Dong RP, Harada H, Sasazuki T. DNA typing of HLA class
+ 17. Noble JA, Valdes AM. Genetics of the HLA region in the prediction of             II genes in B-lymphoblastoid cell lines homozygous for HLA. Tissue
+     type 1 diabetes. Curr Diabetes Rep. 2011;11(6):533–42.                           Antigens. 1992;40(1):5–12.
+ 18. Russell MA, Redick SD, Blodgett DM, Richardson SJ, Leete P, Krogvold L,    37.   Endl J, Rosinger S, Schwarz B, Friedrich SO, Rothe G, Karges W, et al.
+     et al. HLA class II antigen processing and presentation pathway com-             Coexpression of CD25 and OX40 (CD134) receptors delineates auto-
+     ponents demonstrated by transcriptome and protein analyses of islet β            reactive T-cells in type 1 diabetes. Diabetes. 2006;55(1):50–60.
+     -cells from donors with type 1 diabetes. Diabetes. 2019;68(5):988–1001.    38.   Strebelow M, Schlosser M, Ziegler B, Rjasanowski I, Ziegler M. Karls-
+ 19. Bonifacio E, Yu L, Williams AK, Eisenbarth GS, Bingley PJ, Marcovina SM,         burg Type I diabetes risk study of a general population: frequen-
+     et al. Harmonization of glutamic acid decarboxylase and islet antigen-2          cies and interactions of the four major type I diabetes-associated
+     autoantibody assays for national institute of diabetes and digestive and         autoantibodies studied in 9419 schoolchildren. Diabetologia.
+     kidney diseases consortia. J Clin Endocrinol Metab. 2010;95(7):3360–7.           1999;42(6):661–70.
+ 20. Vehik K, Beam CA, Mahon JL, Schatz DA, Haller MJ, Sosenko JM, et al.       39.   Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MA, Bender D, et al.
+     Development of autoantibodies in the TrialNet natural history study.             PLINK: a tool set for whole-genome association and population-based
+     Diabetes Care. 2011;34(9):1897–901.                                              linkage analyses. Am J Hum Genet. 2007;81(3):559–75.
+ 21. Sosenko JM, Skyler JS, Palmer JP, Krischer JP, Yu L, Mahon J, et al. The   40.   Danecek P, Auton A, Abecasis G, Albers CA, Banks E, DePristo
+     prediction of type 1 diabetes by multiple autoantibody levels and their          MA, et al. The variant call format and VCFtools. Bioinformatics.
+     incorporation into an autoantibody risk score in relatives of type 1             2011;27(15):2156–8.
+     diabetic patients. Diabetes Care. 2013;36(9):2615–20.                      41.   Browning BL, Zhou Y, Browning SR. A one-penny imputed
+ 22. Rahman AH, Homann D. Mass cytometry and type 1 diabetes research                 genome from next-generation reference panels. Am J Hum Genet.
+     in the age of single-cell data science. Curr Opin Endocrinol Diabetes            2018;103(3):338–48.
+     Obes. 2020;27(4):231–9.                                                    42.   Kang HM, Subramaniam M, Targ S, Nguyen M, Maliskova L, McCarthy
+ 23. Chen YG, Cabrera SM, Jia S, Kaldunski ML, Kramer J, Cheong S, et al.             E, et al. Multiplexed droplet single-cell RNA-sequencing using natural
+     Molecular signatures differentiate immune states in type 1 diabetic              genetic variation. Nat Biotechnol. 2018;36(1):89–94.
+     families. Diabetes. 2014;63(11):3960–73.                                   43.   Butler A, Hoffman P, Smibert P, Papalexi E, Satija R. Integrating single-cell
+ 24. Kallionpää H, Somani J, Tuomela S, Ullah U, De Albuquerque R,                    transcriptomic data across different conditions, technologies, and spe-
+     Lönnberg T, et al. Early detection of peripheral blood cell signature in         cies. Nat Biotechnol. 2018;36(5):411–20.
+     children developing β-cell autoimmunity at a young age. Diabetes.          44.   Schmidt F, Ranjan B, Lin QXX, Krishnan V, Joanito I, Honardoost MA, et al.
+     2019;68(10):2024–34.                                                             RCA2: a scalable supervised clustering algorithm that reduces batch
+ 25. Teniente-Serra A, Pizarro E, Quirant-Sánchez B, Fernández MA, Vives-Pi           effects in scRNA-seq data. Nucleic Acids Res. 2021;49(15):8505–19.
+     M, Martinez-Caceres EM. Identifying changes in peripheral lympho-          45.   McGinnis CS, Murrow LM, Gartner ZJ. DoubletFinder: doublet detection
+     cyte subpopulations in adult onset type 1 diabetes. Front Immunol.               in single-cell RNA sequencing data using artificial nearest neighbors.
+     2021;12:784110.                                                                  Cell Syst. 2019;8(4):329–37.
+ 26. Hippich M, Beyerlein A, Hagopian WA, Krischer JP, Vehik K, Knoop J,        46.   Novershtern N, Subramanian A, Lawton LN, Mak RH, Haining WN,
+     et al. Genetic contribution to the divergence in type 1 diabetes risk            McConkey ME, et al. Densely interconnected transcriptional circuits
+     between children from the general population and children from                   control cell states in human hematopoiesis. Cell. 2011;144(2):296–309.
+     affected families. Diabetes. 2019;68(4):847–57.                            47.   Monaco G, Lee B, Xu W, Mustafah S, Hwang YY, Carre C, et al. RNA-Seq
+ 27. Inshaw JR, Cutler AJ, Crouch DJ, Wicker LS, Todd JA. Genetic variants            signatures normalized by mRNA abundance allow absolute deconvolu-
+     predisposing most strongly to type 1 diabetes diagnosed under age                tion of human immune cell types. Cell Rep. 2019;26(6):1627–40.
+Honardoost et al. Genome Medicine            (2024) 16:45                                                                                           Page 23 of 24
+
+
+
+
+ 48. Becht E, McInnes L, Healy J, Dutertre CA, Kwok IW, Ng LG, et al. Dimen-        71. Perez RK, Gordon MG, Subramaniam M, Kim MC, Hartoularos GC, Targ
+     sionality reduction for visualizing single-cell data using UMAP. Nat               S, et al. Single-cell RNA-seq reveals cell type–specific molecular and
+     Biotechnol. 2019;37(1):38–44.                                                      genetic associations to lupus. Science. 2022;376(6589):eabf1970.
+ 49. Wood SN. Fast stable restricted maximum likelihood and marginal likeli-        72. Love MI, Huber W, Anders S. Moderated estimation of fold change
+     hood estimation of semiparametric generalized linear models. J R Stat              and dispersion for RNA-seq data with DESeq2. Genome Biol.
+     Soc Ser B Stat Methodol. 2011;73(1):3–36.                                          2014;15(12):1–21.
+ 50. Wood SN. Generalized additive models: an introduction with R. Chap-            73. Wittner J, Schuh W. Krüppel-like factor 2 (KLF2) in immune cell migra-
+     man and hall/CRC; 2006.                                                            tion. Vaccines. 2021;9(10):1171.
+ 51. Yu G, Wang LG, Han Y, He QY. clusterProfiler: an R package for compar-         74. Sebzda E, Zou Z, Lee JS, Wang T, Kahn ML. Transcription factor KLF2
+     ing biological themes among gene clusters. Omics: J Integr Biol.                   regulates the migration of naive T cells by restricting chemokine recep-
+     2012;16(5):284–7.                                                                  tor expression patterns. Nat Immunol. 2008;9(3):292–300.
+ 52. Van de Sande B, Flerin C, Davie K, De Waegeneer M, Hulselmans G,               75. Xu G, Grimes TD, Grayson TB, Chen J, Thielen LA, Tse HM, et al.
+     Aibar S, et al. A scalable SCENIC workflow for single-cell gene regulatory         Exploratory study reveals far reaching systemic and cellular effects of
+     network analysis. Nat Protoc. 2020;15(7):2247–76.                                  verapamil treatment in subjects with type 1 diabetes. Nat Commun.
+ 53. Shen L, Sinai M. GeneOverlap: test and visualize gene overlaps. R pack-            2022;13(1):1–9.
+     age version. 2013;1(0):444.                                                    76. Long SA, Thorpe J, DeBerg HA, Gersuk V, Eddy JA, Harris KM, et al. Partial
+ 54. Chiou J, Geusz RJ, Okino ML, Han JY, Miller M, Melton R, et al. Interpret-         exhaustion of CD8 T cells and clinical response to teplizumab in new-
+     ing type 1 diabetes risk with genetics and single-cell epigenomics.                onset type 1 diabetes. Sci Immunol. 2016;1(5):eaai7793.
+     Nature. 2021;594(7863):398–402.                                                77. Linsley PS, Greenbaum CJ, Speake C, Long SA, Dufort MJ. B lympho-
+ 55. Timshel PN, Thompson JJ, Pers TH. Genetic mapping of etiologic brain               cyte alterations accompany abatacept resistance in new-onset type 1
+     cell types for obesity. Elife. 2020;9:e55851.                                      diabetes. JCI Insight. 2019;4(4):e126136.
+ 56. Skene NG, Bryois J, Bakken TE, Breen G, Crowley JJ, Gaspar HA, et al.          78. Linsley PS, Greenbaum CJ, Rosasco M, Presnell S, Herold KC, Dufort MJ.
+     Genetic identification of brain cell types underlying schizophrenia. Nat           Elevated T cell levels in peripheral blood predict poor clinical response
+     Genet. 2018;50(6):825–33.                                                          following rituximab treatment in new-onset type 1 diabetes. Genes
+ 57. Li H, Courtois ET, Sengupta D, Tan Y, Chen KH, Goh JJL, et al. Refer-              Immun. 2019;20(4):293–307.
+     ence component analysis of single-cell transcriptomes elucidates               79. Ovalle F, Grimes T, Xu G, Patel AJ, Grayson TB, Thielen LA, et al. Verapamil
+     cellular heterogeneity in human colorectal tumors. Nat Genet.                      and beta cell function in adults with recent-onset type 1 diabetes. Nat
+     2017;49(5):708–18.                                                                 Med. 2018;24(8):1108–12.
+ 58. Klein SL, Flanagan KL. Sex differences in immune responses. Nat Rev            80. Greeley SAW, Moore DJ, Noorchashm H, Noto LE, Rostami SY,
+     Immunol. 2016;16(10):626–38.                                                       Schlachterman A, et al. Impaired activation of islet-reactive CD4 T cells
+ 59. Sandor A, Jacobelli J, Friedman R. Immune cell trafficking to the islets           in pancreatic lymph nodes of B cell-deficient nonobese diabetic mice. J
+     during type 1 diabetes. Clin Exp Immunol. 2019;198(3):314–25.                      Immunol. 2001;167(8):4351–7.
+ 60. Michels AW, Landry LG, McDaniel KA, Yu L, Campbell-Thompson M,                 81. Heninger AK, Eugster A, Kuehn D, Buettner F, Kuhn M, Lindner A, et al. A
+     Kwok WW, et al. Islet-derived CD4 T cells targeting proinsulin in human            divergent population of autoantigen-responsive CD4+ T cells in infants
+     autoimmune diabetes. Diabetes. 2017;66(3):722–34.                                  prior to β cell autoimmunity. Sci Transl Med. 2017;9(378):eaaf8848.
+ 61. Velthuis J, Unger W, Van der Slik A, Duinkerken G, Engelse M,                  82. Devaraj S, Glaser N, Griffen S, Wang-Polagruto J, Miguelino E, Jialal
+     Schaapherder A, et al. Accumulation of autoreactive effector T cells               I. Increased monocytic activity and biomarkers of inflammation in
+     and allo-specific regulatory T cells in the pancreas allograft of a type 1         patients with type 1 diabetes. Diabetes. 2006;55(3):774–9.
+     diabetic recipient. Diabetologia. 2009;52(3):494–503.                          83. Toldi G, Vásárhelyi B, Kaposi A, Mészáros G, Pánczél P, Hosszufalusi
+ 62. Lindley S, Dayan CM, Bishop A, Roep BO, Peakman M, Tree TI. Defective              N, et al. Lymphocyte activation in type 1 diabetes mellitus: the
+     suppressor function in CD4+ CD25+ T-cells from patients with type 1                increased significance of Kv1. 3 potassium channels. Immunol Lett.
+     diabetes. Diabetes. 2005;54(1):92–9.                                               2010;133(1):35–41.
+ 63. Ferraro A, Socci C, Stabilini A, Valle A, Monti P, Piemonti L, et al. Expan-   84. Josefsen K, Nielsen H, Lorentzen S, Damsbo P, Buschard K. Circulating
+     sion of Th17 cells and functional defects in T regulatory cells are key            monocytes are activated in newly diagnosed type 1 diabetes mellitus
+     features of the pancreatic lymph nodes in patients with type 1 diabe-              patients. Clin Exp Immunol. 1994;98(3):489–93.
+     tes. Diabetes. 2011;60(11):2903–13.                                            85. Sanchez-Albisua I, Wolf J, Neu A, Geiger H, Wäscher I, Stern M. Coeliac
+ 64. Buckner JH. Mechanisms of impaired regulation by CD4+ CD25+                        disease in children with type 1 diabetes mellitus: the effect of the
+     FOXP3+ regulatory T cells in human autoimmune diseases. Nat Rev                    gluten-free diet. Diabet Med. 2005;22(8):1079–82.
+     Immunol. 2010;10(12):849–59.                                                   86. Holmes G. Coeliac disease and type 1 diabetes mellitus-the case for
+ 65. Kuric E, Seiron P, Krogvold L, Edwin B, Buanes T, Hanssen KF, et al.               screening. Diabet Med. 2001;18(3):169–77.
+     Demonstration of tissue resident memory CD8 T cells in insulitic               87. De Block CE, De Leeuw IH, Bogers JJ, Pelckmans PA, Ieven MM, Van
+     lesions in adult patients with recent-onset type 1 diabetes. Am J Pathol.          Marck EA, et al. Autoimmune gastropathy in type 1 diabetic patients
+     2017;187(3):581–8.                                                                 with parietal cell antibodies: histological and clinical findings. Diabetes
+ 66. Bulek AM, Cole DK, Skowera A, Dolton G, Gras S, Madura F, et al. Struc-            Care. 2003;26(1):82–8.
+     tural basis for the killing of human beta cells by CD8+ T cells in type 1      88. De Block CE, De Leeuw IH, Van Gaal LF, Registry BD. High prevalence
+     diabetes. Nat Immunol. 2012;13(3):283–9.                                           of manifestations of gastric autoimmunity in parietal cell antibody-
+ 67. Pinkse GG, Tysma OH, Bergen CA, Kester MG, Ossendorp F, Van Veelen                 positive type 1 (insulin-dependent) diabetic patients. J Clin Endocrinol
+     PA, et al. Autoreactive CD8 T cells associated with β cell destruction in          Metab. 1999;84(11):4062–7.
+     type 1 diabetes. Proc Natl Acad Sci. 2005;102(51):18425–30.                    89. Thomas JB, Petrovsky N, Ambler GR. Addison’s disease present-
+ 68. Shapiro MR, Dong X, Perry DJ, McNichols JM, Thirawatananond P, Posgai              ing in four adolescents with type 1 diabetes. Pediatr Diabetes.
+     AL, et al. Human immune phenotyping reveals accelerated aging in                   2004;5(4):207–11.
+     type 1 diabetes. JCI Insight. 2023;8(17):e170767.                              90. Maclaren NK, Riley WJ. Thyroid, gastric, and adrenal autoimmunities
+ 69. Damond N, Engler S, Zanotelli VR, Schapiro D, Wasserfall CH, Kusmart-              associated with insulin-dependent diabetes mellitus. Diabetes Care.
+     seva I, et al. A map of human type 1 diabetes progression by imaging               1985;8(Supplement_1):34–8.
+     mass cytometry. Cell Metab. 2019;29(3):755–68.                                 91. De Block C, De Leeuw I, Vertommen J, Rooman R, Du Caju M, Van
+ 70. Wang YJ, Traum D, Schug J, Gao L, Liu C, Atkinson MA, et al. Multiplexed           Campenhout C, et al. Beta-cell, thyroid, gastric, adrenal and coeliac
+     in situ imaging mass cytometry analysis of the human endocrine                     autoimmunity and HLA-DQ types in type 1 diabetes. Clin Exp Immunol.
+     pancreas and immune system in type 1 diabetes. Cell Metab.                         2001;126(2):236–41.
+     2019;29(3):769–83.                                                             92. Pugliese A, Reijonen HK, Nepom J, Burke GW III. Recurrence of autoim-
+                                                                                        munity in pancreas transplant patients: research update. Diabetes
+                                                                                        Manag (London, England). 2011;1(2):229.
+Honardoost et al. Genome Medicine           (2024) 16:45                           Page 24 of 24
+
+
+
+
+ 93. Conrad N, Verbeke G, Molenberghs G, Goetschalckx L, Callender
+     T, Cambridge G, et al. Autoimmune diseases and cardiovascular
+     risk: a population-based study on 19 autoimmune diseases and 12
+     cardiovascular diseases in 22 million individuals in the UK. Lancet.
+     2022;400(10354):733–43.
+ 94. Burster T, Boehm BO. Processing and presentation of (pro)-insulin in the
+     MHC class II pathway: the generation of antigen-based immunomodu-
+     lators in the context of type 1 diabetes mellitus. Diabetes Metab Res
+     Rev. 2010;26(4):227–38.
+ 95. Brown JH, Jardetzky TS, Gorga JC, Stern LJ, Urban RG, Strominger JL,
+     et al. Three-dimensional structure of the human class II histocompat-
+     ibility antigen HLA-DR1. Nature. 1993;364:33–9.
+ 96. Durinovic-Belló I, Rosinger S, Olson JA, Congia M, Ahmad RC, Rickert
+     M, et al. DRB1* 0401-restricted human T cell clone specific for the
+     major proinsulin73-90 epitope expresses a down-regulatory T helper 2
+     phenotype. Proc Natl Acad Sci. 2006;103(31):11683–8.
+ 97. Friese MA, Jones EY, Fugger L. MHC II molecules in inflammatory
+     diseases: interplay of qualities and quantities. Trends Immunol.
+     2005;26(11):559–61.
+ 98. Serreze DV, Fleming SA, Chapman HD, Richard SD, Leiter EH, Tisch RM.
+     B lymphocytes are critical antigen-presenting cells for the initiation of
+     T cell-mediated autoimmune diabetes in nonobese diabetic mice. J
+     Immunol. 1998;161(8):3912–8.
+ 99. Szymczak F, Colli ML, Mamula M, Evans-Molina C, Eizirik DL. Gene
+     expression signatures of target tissues in type 1 diabetes, lupus
+     erythematosus, multiple sclerosis, and rheumatoid arthritis. Sci Adv.
+     2021;7(2):eabd7600.
+100. von Herrath M, Bain SC, Bode B, Clausen JO, Coppieters K, Gaysina L,
+     et al. Anti-interleukin-21 antibody and liraglutide for the preserva-
+     tion of β-cell function in adults with recent-onset type 1 diabetes: a
+     randomised, double-blind, placebo-controlled, phase 2 trial. Lancet
+     Diabetes Endocrinol. 2021;9(4):212–24.
+101. Roep BO, Thomaidou S, van Tienhoven R, Zaldumbide A. Type 1
+     diabetes mellitus as a disease of the β-cell (do not blame the immune
+     system?). Nat Rev Endocrinol. 2021;17(3):150–61.
+102. Escobar G, Mangani D, Anderson AC. T cell factor 1: A master regulator
+     of the T cell response in disease. Sci Immunol. 2020;5(53):eabb9726.
+103. Juhas U, Ryba-Stanisławowska M, Brandt-Varma A, Myśliwiec M,
+     Myśliwska J. Monocytes of newly diagnosed juvenile DM1 patients are
+     prone to differentiate into regulatory IL-10+ M2 macrophages. Immu-
+     nol Res. 2019;67(1):58–69.
+104. Nordmark G, Kristjansdottir G, Theander E, Eriksson P, Brun J, Wang
+     C, et al. Additive effects of the major risk alleles of IRF5 and STAT4 in
+     primary Sjögren’s syndrome. Genes Immun. 2009;10(1):68–76.
+105. Stone RC, Feng D, Deng J, Singh S, Yang L, Fitzgerald-Bocarsly P,
+     et al. IRF5 activation in monocytes of SLE patients is triggered by
+     circulating autoantigens independent of type I IFN. Arthritis Rheum.
+     2012;64(3):788.
+106. Li D, Matta B, Song S, Nelson V, Diggins K, Simpfendorfer KR, et al. IRF5
+     genetic risk variants drive myeloid-specific IRF5 hyperactivation and
+     presymptomatic SLE. JCI Insight. 2020;5(2):e124020.
+107. Wilker PR, Kohyama M, Sandau MM, Albring JC, Nakagawa O, Schwarz
+     JJ, et al. Transcription factor Mef2c is required for B cell prolifera-
+     tion and survival after antigen receptor stimulation. Nat Immunol.
+     2008;9(6):603–12.
+108. Shi J, Chi S, Xue J, Yang J, Li F, Liu X. Emerging role and therapeutic
+     implication of Wnt signaling pathways in autoimmune diseases. J
+     Immunol Res. 2016;2016:18.
+109. Erlich H, Valdes A, Julier C, Mirel D, Noble J. Evidence for association of
+     the TCF7 locus with type I diabetes. Genes Immun. 2009;10(1):S54–9.
+110. Marwaha AK, Tan S, Dutz JP. Targeting the IL-17/IFN-γ axis as a
+     potential new clinical therapy for type 1 diabetes. Clin Immunol.
+     2014;154(1):84–9.
+111. Qaisar N, Jurczyk A, Wang JP. Potential role of type I interferon in the
+     pathogenic process leading to type 1 diabetes. Curr Opin Endocrinol
+     Diabetes Obes. 2018;25(2):94.
+
+
+Publisher’s Note
+Springer Nature remains neutral with regard to jurisdictional claims in pub-
+lished maps and institutional affiliations.
