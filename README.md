@@ -45,29 +45,24 @@ The original development machine (Linux, no discrete GPU) was used for:
 | CPU scVI (20 epochs) | `scripts/03_train_scvi_embeddings.py` | ✅ Done | `results/patient_scvi_embeddings.csv` |
 | Classification benchmarks | `scripts/04_patient_classification.py` | ✅ Done | `results/classification_metrics_summary.csv` |
 | T1D subtype discovery | `scripts/05_t1d_subtype_discovery.py` | ✅ Done | `results/t1d_embedding_subtypes.csv` |
-| **GPU scVI (100 epochs)** | `colab_notebooks/STEP1_GPU_scVI.py` | ⏳ TODO on GPU | — |
-| **Geneformer embeddings** | `colab_notebooks/STEP2_Geneformer.py` | ⏳ TODO on GPU | — |
-| **Final comparison** | `colab_notebooks/STEP3_Final_Comparison.py` | ⏳ TODO after Steps 1+2 | — |
+| **GPU scVI (100 epochs)** | `run_step1_scvi_gpu.py` | ✅ **COMPLETE** | `results/classification_all_gpu.csv`, `figures/scvi_gpu_pca.png` |
+| **Geneformer embeddings** | `run_step2_geneformer_gpu.py` | ✅ **COMPLETE** | `results/geneformer_cell_embeddings.csv`, `figures/geneformer_pca.png` |
+| **Final comparison** | `run_step3_final_comparison.py` | ✅ **COMPLETE** | `results/final_comparison_table.csv`, `figures/final_roc_auc_comparison.png` |
 
 ---
 
-## 📊 Current Best Results (CPU baseline)
+## 📊 Final Results (GPU — RTX 2000 Ada, CUDA 12)
 
-All results use patient-level 5-fold stratified cross-validation (no data leakage):
+All results use patient-level 5-fold stratified cross-validation:
 
 | Feature Set | Best Model | Mean ROC-AUC |
 |-------------|-----------|-------------|
-| Baseline marker + cell-type features | Random Forest | ~0.894 |
-| Cell-type only | Random Forest | ~0.871 |
-| scVI celltype-aware (CPU, 20 epochs) | LR / RF | ~0.882 |
-| scVI patient embeddings (CPU, 20 epochs) | SVM | ~0.868 |
+| **scVI patient (GPU, 100 epochs)** | **HistGradientBoosting** | **0.8976** |
+| Geneformer patient (zero-shot) | HistGradientBoosting | 0.8893 |
+| scVI celltype-aware (GPU) | Logistic Regression | 0.8793 |
+| Geneformer celltype-aware | Random Forest | 0.8463 |
 
-> **These are still preliminary CPU results.** The GPU runs (100 epochs, 3000 HVGs) are expected to produce stronger embeddings. Geneformer (transformer-based) may outperform scVI on this task.
-
-T1D subtype discovery found **3 subtypes** among 46 T1D patients:
-- Subtype 1: 22 patients
-- Subtype 2: 8 patients
-- Subtype 3: 16 patients
+> See `PROJECT_REPORT.md` for the full 16-model comparison table, methods, literature survey, and discussion.
 
 ---
 
