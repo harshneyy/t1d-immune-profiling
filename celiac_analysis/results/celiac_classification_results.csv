@@ -1,0 +1,7 @@
+Feature Set,Classifier,ROC-AUC,Accuracy,F1
+Celiac-Geneformer,Logistic Regression,0.5,0.25,0.4
+Celiac-scVI,Logistic Regression,0.0,0.0,0.0
+Celiac-scVI,Random Forest,0.0,0.0,0.0
+Celiac-scVI,SVM (RBF),0.0,0.0,0.0
+Celiac-Geneformer,Random Forest,0.0,0.0,0.0
+Celiac-Geneformer,SVM (RBF),0.0,0.0,0.0
