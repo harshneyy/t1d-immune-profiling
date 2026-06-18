@@ -1,0 +1,34 @@
+\chapter{Novelty and Contributions}
+\label{chap:novelty}
+
+This internship project makes the following novel contributions to the field of computational immunology and single-cell genomics:
+
+\section{First Head-to-Head Comparison of scVI vs.\ Geneformer on T1D PBMCs}
+
+While both scVI and Geneformer have been applied individually to disease contexts, no prior published work directly compares their patient-level classification performance on T1D single-cell PBMC data. We provide a rigorous, matched comparison using identical data, identical patient-level aggregation strategies, and identical downstream classifiers. The key finding---that Geneformer in zero-shot mode matches a task-specifically trained VAE with only 0.83\% ROC-AUC difference---is a novel empirical result.
+
+\section{Dual Aggregation Strategy Evaluation}
+
+We implement and evaluate two patient-level aggregation strategies for both models:
+\begin{itemize}
+    \item \textbf{Patient embedding}: Simple mean of all cell-level latent vectors across a patient
+    \item \textbf{Cell-type-aware embedding}: Mean pooled per annotated cell type, then concatenated --- creating a structured representation that preserves population-specific signals
+\end{itemize}
+
+This 2$\times$2 design (2 models $\times$ 2 aggregation strategies) allows assessment of whether cell-type resolution matters for downstream classification. This systematic design is itself a methodological contribution.
+
+\section{Novel Finding on Zero-Shot Transfer vs. Fine-Tuning}
+
+We demonstrate that Geneformer, pre-trained on 30 million general-purpose single-cell transcriptomes and never exposed to any T1D data, achieves ROC-AUC = 0.8893 for T1D classification---only 0.83\% below the best task-specific model. Furthermore, when applying supervised fine-tuning to the Geneformer model, the ROC-AUC slightly decreased to 0.86. This highlights a non-trivial empirical finding: foundation models possess such robust general biological knowledge that zero-shot inference can match or exceed fine-tuning on small cohorts, mitigating the risk of overfitting.
+
+\section{Dual-Modality Analysis of Celiac Disease}
+
+To contrast systemic autoimmunity (T1D) with localised autoimmunity, we incorporate Celiac disease using a dual-modality approach. We project Celiac scRNA-seq data into the learned T1D latent space for cross-disease alignment, and independently establish highly accurate classification (ROC-AUC 0.967) using bulk RNA-seq data from intestinal biopsies. This comparative methodology robustly highlights the difference between systemic blood-based signatures and localised tissue signatures.
+
+\section{T1D Immune Subtype Discovery}
+
+Using unsupervised K-Means clustering ($k=3$) of patient-level scVI embeddings from the 46 T1D patients, we identify three distinct immune subtypes. These subtypes represent a biologically meaningful stratification of T1D patients that has potential for clinical validation.
+
+\section{End-to-End Reproducible GPU Pipeline}
+
+All code is publicly available on GitHub (\texttt{harshneyy/t1d-immune-profiling}) and designed to run on a local GPU machine without cloud dependencies. The pipeline processes raw Seurat-exported count matrices through gene ID mapping, tokenisation, embedding extraction, patient aggregation, and classification in a single reproducible workflow, executed on an NVIDIA RTX 2000 Ada (16\,GB VRAM).

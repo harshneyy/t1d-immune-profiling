@@ -1,0 +1,161 @@
+\chapter{Methods}
+\label{chap:methods}
+
+\section{Pipeline Overview}
+
+The end-to-end pipeline is structured as three sequential, self-contained steps:
+
+\begin{enumerate}
+    \item \textbf{Step 1 --- scVI GPU Training}: A Negative Binomial VAE is trained on the raw count matrix. Cell-level latent vectors are extracted, aggregated to patient level, and evaluated by downstream classifiers.
+    \item \textbf{Step 2 --- Geneformer Evaluation}: Cells are tokenised and evaluated using the Geneformer foundation model via two paradigms: zero-shot feature extraction and supervised fine-tuning.
+    \item \textbf{Step 3 --- Celiac Disease Analysis}: Bulk RNA-seq classification using traditional machine learning, and cross-disease projection of scRNA-seq Celiac data into the T1D latent space.
+\end{enumerate}
+
+\section{Step 1: scVI GPU Training}
+
+\subsection{Model Architecture}
+
+scVI~\cite{lopez2018deep} is a variational autoencoder specifically engineered for the statistical properties of scRNA-seq count data. Its architecture (Figure~\ref{fig:scvi_arch}) consists of:
+
+\begin{itemize}
+    \item \textbf{Encoder $q_\phi(\mathbf{z} | \mathbf{x})$}: A 2-layer fully-connected network that maps the input gene count vector $\mathbf{x} \in \mathbb{R}^{G}$ to the mean $\boldsymbol{\mu}$ and log-variance $\log\boldsymbol{\sigma}^2$ of a 30-dimensional Gaussian posterior distribution
+    \item \textbf{Latent sample}: $\mathbf{z}$ is sampled from $\mathcal{N}(\boldsymbol{\mu}, \text{diag}(\boldsymbol{\sigma}^2))$ via the reparameterisation trick, enabling gradient-based optimisation
+    \item \textbf{Decoder $p_\theta(\mathbf{x} | \mathbf{z})$}: A 2-layer network decoding $\mathbf{z}$ to Negative Binomial (NB) parameters---mean $\hat{\mu}_g$ and dispersion $\hat{\theta}_g$---for each gene $g$. The NB distribution is appropriate because scRNA-seq counts are both over-dispersed and zero-inflated
+    \item \textbf{Batch covariate}: Patient/sample identity is injected into the decoder as a one-hot covariate, enabling the model to disentangle biological immune-state variation from technical sequencing batch effects
+\end{itemize}
+
+\input{fig_scvi_arch}
+
+The training objective minimises the negative Evidence Lower Bound (ELBO):
+\begin{equation}
+    \mathcal{L}_{\text{ELBO}} = -\,\mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}\!\left[\log p_\theta(\mathbf{x}|\mathbf{z})\right] + \mathrm{KL}\!\left(q_\phi(\mathbf{z}|\mathbf{x}) \,\big\|\, p(\mathbf{z})\right)
+    \label{eq:elbo}
+\end{equation}
+where the reconstruction term uses the NB log-likelihood and the prior is $p(\mathbf{z}) = \mathcal{N}(\mathbf{0}, \mathbf{I})$.
+
+\subsection{Training Configuration}
+
+\begin{table}[ht]
+\centering
+\caption{scVI Training Hyperparameters}
+\label{tab:scvi_config}
+\begin{tabular}{ll}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+Highly Variable Genes (HVGs) selected & 3,000 \\
+Latent dimensions ($z$) & 30 \\
+Encoder/Decoder hidden units & [128, 128] \\
+Dispersion model & Gene-specific \\
+Likelihood & Negative Binomial \\
+Optimiser & Adam, $\text{lr} = 10^{-3}$ \\
+Training epochs & 100 \\
+Mini-batch size & 128 \\
+Hardware & NVIDIA RTX 2000 Ada (16\,GB VRAM) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Patient-Level Aggregation}
+
+Two strategies are implemented and evaluated independently:
+
+\begin{enumerate}
+    \item \textbf{Patient embedding (30-dim)}: Mean-pool all cell-level 30-dim scVI latent vectors for each patient. Final matrix: $77 \times 30$.
+    \item \textbf{Cell-type-aware embedding}: Compute the mean latent vector within each annotated cell type separately, then concatenate across all types. Final matrix: $77 \times (30 \times N_{\text{celltypes}})$.
+\end{enumerate}
+
+\section{Step 2: Geneformer Embedding Extraction}
+
+\subsection{Model and Pre-training}
+
+Geneformer~\cite{theodoris2023transfer} is a 12-layer, 30M-parameter BERT-style transformer (variant: \texttt{gf-12L-30M-i2048}) pre-trained on the Genecorpus-30M corpus---30 million single-cell transcriptomes spanning diverse human tissues and disease contexts---via masked gene prediction. Unlike scVI, Geneformer is applied here in a completely \textbf{zero-shot} fashion: its weights are frozen and no T1D-specific data is shown during training.
+
+The full extraction pipeline is illustrated in Figure~\ref{fig:gf_pipeline}.
+
+\input{fig_geneformer_pipeline}
+
+\subsection{Rank-Value Tokenisation}
+
+Geneformer's key innovation~\cite{theodoris2023transfer} is its cell-size-invariant tokenisation scheme:
+\begin{enumerate}
+    \item Normalise each cell's counts to the per-cell library size total
+    \item Rank genes from highest to lowest normalised expression within the cell
+    \item Select the top 2,048 expressed genes as the token sequence
+    \item Map each gene's HGNC symbol to its Ensembl ID via the MyGene.info REST API~\cite{theodoris2023transfer}; genes absent from the Geneformer vocabulary are excluded
+\end{enumerate}
+
+Of 20,667 genes in the dataset, 14,618 (70.7\%) were successfully mapped to Ensembl IDs and included in tokenisation. The remaining 29.3\%---primarily pseudogenes, long non-coding RNAs, and olfactory receptor genes---were not represented in the Geneformer pre-training vocabulary and were therefore omitted.
+
+\subsection{Embedding Extraction}
+
+Using Geneformer's \texttt{EmbExtractor} module, the \textbf{mean} of all 2,048 gene-token embeddings from the \textbf{final (12th) transformer layer} is computed per cell. This yields a $512$-dimensional embedding per cell. Processing 117,737 cells produced a dense output matrix of shape $117{,}737 \times 512$ (approximately 1.6\,GB).
+
+Inference was performed with a forward batch size of 8 cells per pass---constrained by the 16\,GB VRAM of the RTX 2000 Ada GPU when loading the 104M-parameter \texttt{gf-12L-30M-i2048} variant with full-precision weights.
+
+\begin{table}[ht]
+\centering
+\caption{Geneformer Inference Compute Details}
+\label{tab:geneformer_compute}
+\begin{tabular}{ll}
+\toprule
+\textbf{Specification} & \textbf{Value} \\
+\midrule
+GPU & NVIDIA RTX 2000 Ada, 16\,GB VRAM \\
+Framework & PyTorch + HuggingFace Transformers v4.46 \\
+Forward batch size & 8 cells/batch \\
+Total inference time & $\approx$3 hours 7 minutes \\
+Output shape & $117{,}737 \times 512$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Patient-Level Aggregation (Zero-Shot)}
+
+Identical dual-strategy aggregation as scVI:
+\begin{itemize}
+    \item \textbf{Patient embedding}: $77 \times 512$; direct mean pool across all cells per patient
+    \item \textbf{Cell-type-aware embedding}: Per-cell-type means, followed by PCA reduction to 200 components before concatenation, to mitigate the curse of dimensionality
+\end{itemize}
+
+\subsection{Supervised Fine-Tuning}
+
+The fine-tuning architecture is illustrated in Figure~\ref{fig:finetune_arch}.
+\input{fig_finetune_arch}
+
+To evaluate whether task-specific supervision improves upon zero-shot performance, the Geneformer model was fine-tuned for sequence classification. A classification head was added to the pre-trained transformer to predict the binary disease state (T1D vs Healthy). The model was trained for 5 epochs using a learning rate of $2\times 10^{-5}$, weight decay of 0.001, and a cosine learning rate scheduler. To handle variable-length token sequences (up to the 2,048 limit), a custom data collator with dynamic padding was implemented. Given the memory footprint of the 316 million parameter model (including the classification head), the training batch size was constrained to 8 on the RTX 2000 Ada. Evaluation was performed using 5-fold cross-validation matching the zero-shot protocol.
+
+\section{Classification Protocol}
+
+Patient-level embeddings serve as input features for four binary classifiers (T1D = 1, Healthy = 0):
+
+\begin{itemize}
+    \item \textbf{Logistic Regression (LR)}~\cite{dominguez2022cross}: L2-regularised; $C=1.0$; max iterations = 1000
+    \item \textbf{Random Forest (RF)}: 100 decision trees; Gini impurity criterion; no max depth constraint
+    \item \textbf{Histogram Gradient Boosting (HGB)}: Scikit-learn's \texttt{HistGradientBoostingClassifier}; early stopping with 10\% validation fraction; max iterations = 300
+    \item \textbf{Support Vector Machine (SVM)}: RBF kernel; $C=1.0$; probability estimates enabled for AUC computation
+\end{itemize}
+
+\subsection{Evaluation Protocol}
+
+\begin{itemize}
+    \item \textbf{Cross-validation}: Stratified 5-fold CV partitioned at the \emph{patient} level, ensuring no cell from the same patient appears in both the training and test partitions of any fold (preventing data leakage)
+    \item \textbf{Primary metric}: ROC-AUC; chosen for its threshold-independence and resilience to class imbalance (46 T1D vs.\ 31 healthy)~\cite{yazar2022single}
+    \item \textbf{Secondary metrics}: Accuracy, F1-score, Balanced Accuracy
+    \item \textbf{Reporting}: Mean $\pm$ standard deviation across 5 folds for all metrics
+\end{itemize}
+
+\section{Celiac Disease Analysis}
+
+\subsection{Bulk RNA-seq Classification}
+
+For the Celiac disease bulk RNA-seq dataset (GSE145358, $n=36$), the raw count matrix was preprocessed by converting to Counts Per Million (CPM) and applying a $\log_2(x+1)$ transformation. The top 2,000 highly variable genes were selected based on dispersion. Two classification tasks were defined:
+\begin{enumerate}
+    \item \textbf{Binary Classification}: Active Celiac vs.\ Healthy Controls.
+    \item \textbf{Multi-class Classification}: Active Celiac vs.\ Silent (GFD) vs.\ Healthy Controls.
+\end{enumerate}
+Support Vector Machines (SVM) and Random Forest classifiers were evaluated using leave-one-out cross-validation due to the small sample size.
+
+\subsection{Cross-Disease Latent Alignment}
+
+To compare the systemic immune shift of T1D against the localised profile of Celiac disease, the Celiac scRNA-seq dataset (4 patients) was projected into the established T1D scVI latent space. The Celiac count matrix was aligned to the T1D feature space (padding missing genes with zero). The pre-trained T1D scVI encoder was then used to infer the 30-dimensional latent representations of the Celiac cells, which were visualised alongside T1D and healthy T1D controls using UMAP and PCA.

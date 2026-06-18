@@ -1,0 +1,70 @@
+\chapter{Introduction}
+\label{chap:intro}
+
+\section{Background and Motivation}
+
+Autoimmune diseases are chronic conditions wherein the adaptive immune system mounts a sustained, misdirected response against the body's own tissues. This pathological self-attack leads to progressive tissue damage and lifelong health complications. Two prominent, yet distinct, autoimmune conditions are Type 1 Diabetes (T1D) and Celiac Disease (CeD).
+
+\textbf{Type 1 Diabetes (T1D)} is characterised by the destruction of insulin-secreting beta cells within the islets of Langerhans in the pancreas, leading to permanent insulin deficiency. Globally, T1D afflicts approximately 8.4 million individuals, with incidence climbing at roughly 3--4\% annually~\cite{theodoris2023transfer}. 
+
+\textbf{Celiac Disease (CeD)} is an autoimmune enteropathy triggered by the ingestion of gluten in genetically susceptible individuals. It leads to the destruction of the intestinal villi, causing malabsorption and severe gastrointestinal symptoms. Unlike T1D, which involves a systemic and irreversible loss of beta cells, Celiac disease is primarily localised to the gut mucosa and can often be managed by strict adherence to a gluten-free diet (GFD).
+
+Despite considerable research investment, predicting disease onset, understanding the systemic versus localised immune dysregulation, and stratifying patients effectively remain significant clinical challenges.
+
+\subsection{Immune Dysregulation in Autoimmunity}
+
+Peripheral blood mononuclear cells (PBMCs)---the heterogeneous population of lymphocytes and monocytes circulating in blood---offer a non-invasive lens through which the systemic immune state of a patient can be examined. In T1D, multiple PBMC compartments exhibit reproducible transcriptional abnormalities:
+
+\begin{itemize}
+    \item \textbf{Cytotoxic and helper T cells (CD8+, CD4+)}: Autoreactive clones primed against islet antigens (insulin, GAD65, IA-2) accumulate and mediate beta-cell killing
+    \item \textbf{B lymphocytes}: Overrepresentation of autoreactive B cell clones drives islet autoantibody production (anti-GAD, anti-ZnT8) and mediates antigen presentation to autoreactive T cells
+    \item \textbf{Classical monocytes (CD14+)}: Elevated pro-inflammatory activation states with upregulated interferon-stimulated genes and increased IL-1$\beta$ secretion
+    \item \textbf{Regulatory T cells (Tregs)}: Numerically reduced and functionally defective Treg compartment, impairing peripheral immune self-tolerance
+\end{itemize}
+
+Traditionally, these abnormalities have been investigated via flow cytometry (measuring surface protein expression on millions of cells simultaneously) or bulk RNA-seq (averaging gene expression across all cells in a sample). Both methods have fundamental limitations: flow cytometry quantifies only pre-selected protein markers, missing genome-wide transcriptional nuance; bulk RNA-seq collapses the rich cellular heterogeneity of a sample into a single averaged profile.
+
+\subsection{Single-Cell RNA-seq as a High-Resolution Tool}
+
+Single-cell RNA sequencing (scRNA-seq) resolves this limitation by profiling the complete transcriptional state---spanning $\sim$20,000 protein-coding genes---of each individual cell. Applied to PBMC samples, it simultaneously characterises every major immune population present, revealing cell-type-specific and disease-associated gene expression changes at a resolution unattainable by prior methods.
+
+However, scRNA-seq data presents substantial computational challenges. A dataset of 117,737 cells generates a matrix exceeding 2.4 billion entries, with extreme sparsity (the majority of genes measure zero counts in any given cell due to technical dropout), over-dispersion, and high noise. Extracting biological signal from such data requires models explicitly designed for these statistical properties.
+
+\section{Problem Definition}
+
+Given high-dimensional, sparse transcriptomic datasets from T1D and Celiac disease patients, the core questions this internship addresses are:
+
+\begin{center}
+\textit{Can deep representation learning models---trained on single-cell transcriptomics---encode patient-level immune profiles that reliably distinguish autoimmune patients from healthy individuals? Does a large-scale pre-trained foundation model transfer this capability without disease-specific supervision, and does supervised fine-tuning improve upon it? Finally, how do systemic autoimmune diseases (like T1D) compare to localised ones (like CeD) in the latent transcriptomic space?}
+\end{center}
+
+\section{Proposed Solution}
+
+We propose an end-to-end analytical pipeline that leverages multiple machine learning paradigms across both single-cell and bulk RNA-seq data:
+
+\begin{enumerate}
+    \item \textbf{scVI}~\cite{lopez2018deep} --- a task-specific variational autoencoder trained directly on the T1D PBMC dataset (GPU-accelerated)
+    \item \textbf{Geneformer}~\cite{theodoris2023transfer} --- a 30-million-parameter BERT-style transformer evaluated both in a \textbf{zero-shot} manner and via \textbf{supervised fine-tuning}.
+    \item \textbf{Bulk ML Classifiers} --- robust classical machine learning (SVM, Random Forest) applied to bulk RNA-seq data for Celiac disease classification.
+    \item \textbf{Cross-Disease Latent Alignment} --- mapping Celiac single-cell data into the T1D scVI latent space to compare the magnitude of systemic immune dysregulation.
+\end{enumerate}
+
+For each model, cell-level embeddings are aggregated to patient-level immune profiles via two strategies. Four downstream classifiers then evaluate T1D vs.\ healthy discriminability under rigorous 5-fold cross-validation.
+
+\section{Objectives}
+
+\begin{enumerate}
+    \item Train scVI on the T1D dataset using GPU-accelerated computation and extract latent representations.
+    \item Evaluate Geneformer embeddings via zero-shot extraction and supervised fine-tuning.
+    \item Compare 16 model variants (2 models $\times$ 2 aggregation strategies $\times$ 4 classifiers) for T1D classification using ROC-AUC.
+    \item Project Celiac disease single-cell data into the T1D latent space for cross-disease comparison.
+    \item Train robust machine learning classifiers on Celiac disease bulk RNA-seq data to distinguish Healthy, GFD, and Active disease states.
+\end{enumerate}
+
+\section{Scope and Limitations}
+
+The project scope covers two autoimmune diseases, leveraging single-cell (T1D: 77 patients; CeD: 4 patients) and bulk (CeD: 36 samples) RNA-seq modalities. Limitations include the modest patient cohort sizes and the reliance on publicly available datasets. Clinical translation would require independent prospective validation in larger, multi-centre cohorts.
+
+\section{Report Organisation}
+
+Chapter~\ref{chap:lit} surveys the relevant literature. Chapter~\ref{chap:novelty} describes contributions. Chapter~\ref{chap:dataset} details the dataset. Chapter~\ref{chap:methods} describes the full pipeline. Chapter~\ref{chap:results} presents all results and figures. Chapter~\ref{chap:conclusion} discusses findings and future directions.

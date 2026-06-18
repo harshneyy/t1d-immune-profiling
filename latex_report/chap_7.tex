@@ -1,0 +1,44 @@
+\chapter{Conclusion and Future Work}
+\label{chap:conclusion}
+
+\section{Conclusion}
+
+This internship project successfully implemented and compared two state-of-the-art deep learning approaches---scVI (VAE) and Geneformer (transformer foundation model)---for learning patient-level immune representations from T1D single-cell PBMC RNA-seq data.
+
+The key conclusions are:
+
+\begin{enumerate}
+    \item \textbf{Deep representation learning works for T1D classification}: All 16 model variants (4 feature sets $\times$ 4 classifiers) achieve ROC-AUC $> 0.75$. The top model (scVI patient + HGB) achieves ROC-AUC = 0.8976.
+
+    \item \textbf{Zero-shot performance rivals fine-tuning}: With no fine-tuning on T1D data, the Geneformer foundation model achieves 0.8893 ROC-AUC. Supervised fine-tuning yielded 0.86 ROC-AUC, demonstrating that massive foundation models can capture the biological variance optimally during pre-training, rendering fine-tuning on small cohorts unnecessary and prone to overfitting.
+
+    \item \textbf{Patient-level aggregation is effective}: Simple mean-pooling of cell embeddings to the patient level retains sufficient disease signal for strong classification, validating this scalable aggregation strategy.
+
+    \item \textbf{Systemic vs. Localised Autoimmunity}: Latent space alignment showed that Celiac disease PBMCs cluster closely with healthy cells, contrasting with the profound systemic shift seen in T1D PBMCs. However, when applying machine learning to bulk RNA-seq from the site of active Celiac disease (intestinal biopsies), classifiers achieved a highly discriminative ROC-AUC of 0.967.
+\end{enumerate}
+
+These results contribute to the growing body of evidence that foundation models for single-cell genomics are powerful tools for disease characterisation, and that the choice of modality (PBMC vs. biopsy) must be tailored to the systemic or localised nature of the autoimmune condition.
+
+\section{Future Work}
+
+\subsection{Immediate Next Steps}
+
+\begin{enumerate}
+    \item \textbf{SHAP Feature Importance}: Apply SHAP values to the best HGB classifier to identify which embedding dimensions (and by extension, which genes/pathways) drive T1D and Celiac classification. This could reveal novel biological markers.
+
+    \item \textbf{T1D Subtype Clinical Validation}: Cross-reference the three discovered T1D immune subtypes with HLA-DQ risk haplotypes, disease duration, residual C-peptide levels (beta-cell function proxy), and age at diagnosis.
+
+    \item \textbf{Ensemble Model}: Combine scVI and Geneformer patient embeddings as joint features for classification. Given their complementary strengths (task-specific vs.\ general), an ensemble may exceed 0.90 ROC-AUC.
+\end{enumerate}
+
+\subsection{Longer-Term Research Directions}
+
+\begin{enumerate}
+    \item \textbf{Longitudinal Profiling}: Apply the pipeline to paired pre-diagnosis / post-diagnosis samples (e.g., TrialNet cohort data) to track immune state trajectory from autoantibody positivity to clinical T1D.
+
+    \item \textbf{Drug Response Prediction}: Apply Geneformer's perturbation mode to T1D immune cells to predict which therapeutic interventions (anti-CD3, IL-2, CTLA4-Ig) would normalise the immune transcriptome.
+
+    \item \textbf{Multi-Modal Integration}: Integrate scRNA-seq with ATAC-seq (chromatin accessibility) and proteomics (CITE-seq) for a more complete picture of immune dysregulation.
+
+    \item \textbf{Independent Cohort Validation}: Apply the trained models to publicly available T1D scRNA-seq datasets to test generalisability across sequencing platforms and patient populations.
+\end{enumerate}

@@ -1,0 +1,38 @@
+% Geneformer pipeline diagram
+\begin{figure}[ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.5cm and 0.4cm,
+    stage/.style={rectangle, draw, rounded corners=5pt, minimum width=2.3cm, minimum height=1.0cm, font=\small, align=center, fill=blue!10},
+    annot/.style={font=\scriptsize\itshape, text width=2.2cm, align=center},
+    arrow/.style={->, thick, >=stealth}
+]
+
+\node[stage, fill=gray!15] (raw)         {Raw Counts\\117K cells};
+\node[stage, fill=cyan!15,   right=0.5cm of raw]         (rank)    {Rank-Value\\Encoding};
+\node[stage, fill=teal!15,   right=0.5cm of rank]        (tokens)  {Gene Token\\Sequence\\(top 2048)};
+\node[stage, fill=blue!20,   right=0.5cm of tokens, minimum height=1.6cm] (tf) {Geneformer\\12-Layer\\Transformer\\(30M params)};
+\node[stage, fill=orange!20, right=0.5cm of tf]          (cemb)    {Cell Emb.\\512-dim};
+\node[stage, fill=green!15,  right=0.5cm of cemb]        (pagg)    {Patient\\Aggregation\\(mean)};
+\node[stage, fill=red!15,    right=0.5cm of pagg]        (clf)     {Classifier\\HGB/SVM\\LR/RF};
+
+\draw[arrow] (raw)    -- (rank);
+\draw[arrow] (rank)   -- (tokens);
+\draw[arrow] (tokens) -- (tf);
+\draw[arrow] (tf)     -- (cemb);
+\draw[arrow] (cemb)   -- (pagg);
+\draw[arrow] (pagg)   -- (clf);
+
+\node[annot, below=0.25cm of rank]   {Symbol to Ensembl ID};
+\node[annot, below=0.25cm of tokens] {Vocab lookup via MyGene.info};
+\node[annot, below=0.25cm of tf]     {Pre-trained on Genecorpus-30M};
+\node[annot, below=0.25cm of cemb]   {Last-layer mean pooling};
+\node[annot, below=0.25cm of pagg]   {77 patients};
+\node[annot, below=0.25cm of clf]    {5-fold CV};
+
+\end{tikzpicture}%
+}
+\caption{Geneformer embedding extraction pipeline. Raw gene counts undergo rank-value tokenisation---genes ranked by normalised expression are represented as Ensembl ID tokens. The top 2,048 expressed genes form the input sequence to the 12-layer Geneformer transformer pre-trained on 30M diverse single-cell transcriptomes~\cite{theodoris2023transfer}, used in zero-shot mode. The mean of last-layer token embeddings yields a 512-dimensional cell vector, averaged per patient and fed to downstream classifiers.}
+\label{fig:gf_pipeline}
+\end{figure}

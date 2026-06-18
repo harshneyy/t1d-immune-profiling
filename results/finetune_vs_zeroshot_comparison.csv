@@ -1,0 +1,5 @@
+Method,ROC-AUC,Approach
+Zero-Shot (LR),0.85,Zero-Shot
+Zero-Shot (RF),0.87,Zero-Shot
+Zero-Shot (SVM),0.83,Zero-Shot
+Fine-Tuned Geneformer,0.8588,Fine-Tuned

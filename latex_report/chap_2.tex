@@ -1,0 +1,40 @@
+\chapter{Literature Review}
+\label{chap:lit}
+
+\section{Single-Cell RNA-seq in Immunology}
+
+The advent of droplet-based scRNA-seq (10x Genomics Chromium, 2015) enabled large-scale profiling of immune populations at single-cell resolution. Landmark studies such as the Human Cell Atlas~\cite{regev2017human} demonstrated the ability to systematically map cell types across tissues. In autoimmune disease research, scRNA-seq has been applied to rheumatoid arthritis synovium~\cite{zhang2019defining}, lupus PBMCs, and multiple sclerosis, consistently revealing disease-specific transcriptional programs invisible to bulk methods.
+
+In T1D specifically, Xin et al.\ (2016) used scRNA-seq on pancreatic islets to characterise surviving beta cells, while Gao et al.\ (2022) profiled PBMCs from T1D patients and healthy controls, identifying dysregulated monocyte activation pathways. Similarly, in Celiac disease, studies like that of Christophersen et al.\ (2019) have profiled intestinal biopsies to identify gluten-specific T cell subsets. These studies, however, typically relied on conventional dimensionality reduction (PCA, UMAP) and clustering rather than deep learning-based representation, and rarely align datasets from different autoimmune conditions into a shared latent space for direct comparison.
+
+\section{Deep Generative Models for scRNA-seq}
+
+\textbf{scVI} (Single-Cell Variational Inference) was introduced by Lopez et al.~\cite{lopez2018deep} as the first principled deep generative model for scRNA-seq data. scVI models count data with a Negative Binomial distribution (appropriate for the over-dispersed, zero-inflated nature of scRNA-seq counts), and uses a variational autoencoder to learn a low-dimensional latent space. Each cell is encoded as a vector of typically 10--30 dimensions that captures its transcriptional state while controlling for batch effects.
+
+scVI has become a standard tool in the scRNA-seq analysis ecosystem (the scvi-tools package, Gayoso et al.~\cite{gayoso2022python}), with applications in differential expression, cell-type annotation, and data integration. Subsequent work in the scVI family (scANVI, totalVI, PEAKVI) extended this to multi-modal data and semi-supervised settings.
+
+\section{Transformer Foundation Models for Single-Cell Biology}
+
+The transformer architecture~\cite{vaswani2017attention}, originally developed for natural language processing, has been adapted for biology with remarkable success.
+
+\textbf{Geneformer}~\cite{theodoris2023transfer} is a BERT-style transformer pre-trained on 30 million single-cell transcriptomes from the Genecorpus-30M dataset. Geneformer treats each cell as a ``sentence'' where genes are ``tokens,'' ranked by their expression level relative to the corpus-wide gene median. This rank-based tokenisation is cell-size-invariant and effectively normalises for technical confounders. After pre-training on a massive, diverse single-cell corpus, Geneformer learns rich contextual representations of gene co-expression patterns.
+
+\textbf{scGPT}~\cite{cui2024scgpt} and \textbf{scBERT}~\cite{yang2022scbert} are alternative transformer architectures for single-cell data. These models demonstrate that large-scale pre-training on single-cell data captures transferable biological representations.
+
+\section{Patient-Level Representation Learning}
+
+A critical challenge in translating single-cell findings to clinical utility is aggregating cell-level embeddings to the patient level. Approaches include:
+
+\begin{itemize}
+    \item \textbf{Simple mean pooling}: Average all cell embeddings for a patient
+    \item \textbf{Cell-type-stratified aggregation}: Average separately within each annotated cell type and concatenate, preserving cell-type-specific signals
+    \item \textbf{Set-based models}: Attention-based aggregation
+\end{itemize}
+
+The DISCERN framework (Palla et al.~\cite{palla2022squidpy}) demonstrated that patient-level aggregation of latent cell representations outperforms bulk methods for disease classification. Our work follows this paradigm, implementing and comparing both mean pooling and cell-type-stratified aggregation.
+
+\section{Machine Learning for Disease Classification from scRNA-seq}
+
+Several prior works have trained classifiers on scRNA-seq-derived patient-level features for disease prediction. Yazar et al.~\cite{yazar2022single} showed that cell-type composition alone predicts several autoimmune diseases. Dominguez Conde et al.~\cite{dominguez2022cross} demonstrated cross-tissue immune cell atlases enabling disease association.
+
+Our work is the first (to our knowledge) to directly compare VAE-based (scVI) and large transformer-based (Geneformer) patient-level embeddings for T1D classification from scRNA-seq PBMCs.

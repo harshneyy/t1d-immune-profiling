@@ -1,0 +1,40 @@
+% Geneformer Fine-Tuning Architecture Diagram
+\begin{figure}[ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.5cm and 0.55cm,
+    stage/.style={rectangle, draw, rounded corners=5pt, minimum width=2.5cm,
+                  minimum height=1.0cm, font=\small, align=center},
+    arrow/.style={->, thick, >=stealth},
+    annot/.style={font=\scriptsize\itshape, text width=2.4cm, align=center}
+]
+
+\node[stage, fill=gray!15]   (raw)    {Raw\\Counts\\117K cells};
+\node[stage, fill=cyan!15,   right=0.55cm of raw]    (tok)    {Rank-Value\\Tokenisation\\(top 512)};
+\node[stage, fill=blue!25,   right=0.55cm of tok, minimum height=1.6cm]    (gf)     {Geneformer\\12-Layer\\Transformer\\(frozen base)};
+\node[stage, fill=orange!20, right=0.55cm of gf]     (pool)   {CLS\\Pooling\\512-dim};
+\node[stage, fill=red!20,    right=0.55cm of pool, minimum height=1.3cm]   (head)   {Classification\\Head\\(Linear Layer)};
+\node[stage, fill=green!20,  right=0.55cm of head]   (pred)   {Prediction\\T1D / Healthy};
+
+% Fine-tune annotation box
+\node[draw, dashed, rounded corners, fill=yellow!10,
+      fit=(gf)(head), inner sep=6pt,
+      label={[font=\scriptsize\bfseries]above:Trainable Region (Fine-Tuning)}] {};
+
+\draw[arrow] (raw)  -- (tok);
+\draw[arrow] (tok)  -- (gf);
+\draw[arrow] (gf)   -- (pool);
+\draw[arrow] (pool) -- (head);
+\draw[arrow] (head) -- (pred);
+
+\node[annot, below=0.3cm of tok]  {Truncated to 512 tokens};
+\node[annot, below=0.3cm of gf]   {Pre-trained on\\Genecorpus-30M};
+\node[annot, below=0.3cm of pool] {Mean of last\\transformer layer};
+\node[annot, below=0.3cm of head] {316M params total\\lr=$2{\times}10^{-5}$, 5 epochs};
+
+\end{tikzpicture}%
+}
+\caption{Geneformer supervised fine-tuning architecture. The pre-trained 12-layer transformer backbone is extended with a linear classification head. Sequences are truncated to 512 tokens. The entire model (316M parameters) is fine-tuned end-to-end using a cosine learning rate schedule and dynamic padding to handle variable-length gene-token sequences. A batch size of 8 was used due to GPU memory constraints.}
+\label{fig:finetune_arch}
+\end{figure}

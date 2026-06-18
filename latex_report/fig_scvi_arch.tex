@@ -1,0 +1,66 @@
+% scVI Architecture Diagram — clean vertical layout, no overlaps
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+    node distance=0.55cm,
+    box/.style={rectangle, draw, rounded corners=4pt,
+                minimum width=5.2cm, minimum height=0.70cm,
+                font=\small, align=center},
+    inp/.style={box, fill=gray!20},
+    enc/.style={box, fill=blue!15},
+    lat/.style={box, fill=orange!25},
+    dec/.style={box, fill=green!15},
+    outbox/.style={box, fill=red!12},
+    bat/.style={rectangle, draw, rounded corners=3pt, dashed,
+                minimum width=3.5cm, minimum height=0.60cm,
+                font=\scriptsize, align=center, fill=purple!10},
+    arrow/.style={->, thick, >=stealth},
+    darrow/.style={->, thick, dashed, >=stealth, gray}
+]
+
+%% --- Vertical flow ---
+\node[inp] (input)  {Input: $\mathbf{x} \in \mathbb{R}^{3000}$ \quad (HVG counts)};
+
+\node[enc, below=0.55cm of input]  (enc1)  {Encoder FC Layer 1 \quad 128 units, ReLU};
+\node[enc, below=0.55cm of enc1]   (enc2)  {Encoder FC Layer 2 \quad 128 units, ReLU};
+
+\node[lat, below=0.55cm of enc2]   (mu_sig){$\boldsymbol{\mu}$ (30-dim) \qquad $\log\boldsymbol{\sigma}^2$ (30-dim)};
+
+\node[lat, below=0.55cm of mu_sig, minimum width=5.2cm] (z)
+      {$\mathbf{z} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\sigma}^2)$ \quad Latent Space (30-dim)};
+
+\node[dec, below=0.55cm of z]      (dec1)  {Decoder FC Layer 1 \quad 128 units, ReLU};
+\node[dec, below=0.55cm of dec1]   (dec2)  {Decoder FC Layer 2 \quad 128 units, ReLU};
+
+\node[outbox, below=0.55cm of dec2] (outnode) {Output: NB Parameters $\hat{\mu}_g,\;\hat{\theta}_g$ per gene};
+
+%% --- Batch covariate ---
+\node[bat, right=1.2cm of dec1] (batch) {Batch Covariate\\(Sample ID)};
+
+%% --- Main arrows ---
+\draw[arrow] (input)   -- (enc1);
+\draw[arrow] (enc1)    -- (enc2);
+\draw[arrow] (enc2)    -- (mu_sig);
+\draw[arrow] (mu_sig)  -- (z);
+\draw[arrow] (z)       -- (dec1);
+\draw[arrow] (dec1)    -- (dec2);
+\draw[arrow] (dec2)    -- (outnode);
+
+%% --- Batch covariate arrow ---
+\draw[darrow] (batch.west) -- (dec1.east);
+
+%% --- Section braces ---
+\draw[decorate, decoration={brace,amplitude=5pt,raise=4pt}, blue!60]
+    (enc1.north east) -- (enc2.south east)
+    node[midway, right=10pt, font=\footnotesize\itshape, blue!70]
+    {Encoder $q_\phi(\mathbf{z}|\mathbf{x})$};
+
+\draw[decorate, decoration={brace,amplitude=5pt,raise=4pt}, green!50!black]
+    (dec1.north east) -- (dec2.south east)
+    node[midway, right=10pt, font=\footnotesize\itshape, green!60!black]
+    {Decoder $p_\theta(\mathbf{x}|\mathbf{z})$};
+
+\end{tikzpicture}
+\caption{Architecture of scVI (Single-Cell Variational Inference)~\cite{lopez2018deep}. The encoder maps the 3,000-gene count input through two fully-connected layers to produce parameters $(\boldsymbol{\mu}, \log\boldsymbol{\sigma}^2)$ of a 30-dimensional Gaussian posterior. A latent sample $\mathbf{z}$ is drawn via the reparameterisation trick. The decoder reconstructs Negative Binomial (NB) parameters $(\hat{\mu}_g, \hat{\theta}_g)$ per gene, with sample batch identity injected as a covariate to disentangle technical from biological variation.}
+\label{fig:scvi_arch}
+\end{figure}

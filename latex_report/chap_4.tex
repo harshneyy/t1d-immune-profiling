@@ -1,0 +1,86 @@
+\chapter{Dataset Description}
+\label{chap:dataset}
+
+\section{Source and Collection}
+
+The dataset for Type 1 Diabetes comes from a systematic immune profiling study of T1D PBMCs. Peripheral blood was collected from:
+\begin{itemize}
+    \item \textbf{46 T1D patients} --- confirmed diagnosis based on autoantibody positivity and insulin dependence
+    \item \textbf{31 healthy controls} --- age/sex-matched, no autoimmune disease history
+\end{itemize}
+
+PBMCs were isolated by Ficoll density centrifugation and immediately processed for 10x Genomics Chromium single-cell RNA-seq (v3 chemistry). Sequencing was performed to a depth of $\sim$20,000 reads per cell.
+
+\section{Data Specifications}
+
+Table~\ref{tab:dataset_t1d} summarises the key properties of the dataset.
+
+\begin{table}[h!]
+\centering
+\caption{T1D scRNA-seq Dataset Properties}
+\label{tab:dataset_t1d}
+\begin{tabular}{ll}
+\toprule
+\textbf{Property} & \textbf{Value} \\
+\midrule
+Total cells (post-QC) & 117,737 \\
+Genes measured & 20,667 \\
+Total patients/samples & 77 \\
+T1D patients & 46 \\
+Healthy controls & 31 \\
+Cells per patient (mean) & 1,529 \\
+Normalisation applied & Seurat SCTransform (SCT) \\
+Matrix format & Sparse MTX (10x Genomics compatible) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Clinical Metadata}
+
+The dataset includes rich clinical metadata for each patient (Table~\ref{tab:metadata}). Importantly, HLA haplotypes and clinical variables are \textbf{intentionally excluded} from the main classification pipeline to ensure the classifier relies only on learned gene-expression embeddings, not clinical labels. These variables are reserved for downstream biological interpretation.
+
+\begin{table}[h!]
+\centering
+\caption{Clinical Metadata Columns in \texttt{seurat\_metadata.csv}}
+\label{tab:metadata}
+\begin{tabular}{ll}
+\toprule
+\textbf{Column} & \textbf{Description} \\
+\midrule
+\texttt{COND} & Disease label: \texttt{T1D} or \texttt{H} (Healthy) \\
+\texttt{Sample\_ID} & Unique patient identifier \\
+\texttt{Cluster\_Annotation\_Merged} & Immune cell type annotation \\
+\texttt{Gender} & Patient sex \\
+\texttt{Age\_at\_diagnosis} & Age at first T1D diagnosis \\
+\texttt{Disease\_Duration} & Years since diagnosis \\
+\texttt{DQ\_Risk\_Haplotypes} & HLA-DQ haplotype risk class \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Cell Type Composition}
+
+The annotated cell types span all major PBMC populations:
+
+\begin{itemize}
+    \item \textbf{T cells}: CD4+, CD8+, Regulatory T (Treg), Gamma-delta T
+    \item \textbf{B cells}: Naive B, Memory B, Plasmablasts
+    \item \textbf{NK cells}: Cytotoxic NK, NK-dim
+    \item \textbf{Monocytes}: Classical (CD14+), Non-classical (CD16+)
+    \item \textbf{Dendritic cells}: Plasmacytoid DC (pDC), Conventional DC (cDC)
+\end{itemize}
+
+\section{Celiac Disease Datasets}
+
+To facilitate cross-disease comparison and validate the machine learning approach on a localised autoimmune condition, two Celiac disease datasets were included:
+
+\subsection{Celiac scRNA-seq (GSE315138)}
+Used for cross-disease latent space alignment. This dataset comprises single-cell RNA-seq data from PBMCs of 4 Celiac disease patients. The raw count matrix, featuring approximately 33,000 cells, was preprocessed using standard Seurat workflows (QC filtering, SCTransform normalisation) before projection into the T1D scVI latent space.
+
+\subsection{Celiac Bulk RNA-seq (GSE145358)}
+Used for robust machine learning classification. This dataset contains bulk transcriptomic profiles from 36 intestinal biopsy samples. The cohort includes three distinct patient states:
+\begin{itemize}
+    \item \textbf{Healthy Controls}: Normal intestinal mucosa
+    \item \textbf{Silent Celiac (GFD)}: Patients adhering to a Gluten-Free Diet with recovered mucosa
+    \item \textbf{Active Celiac}: Untreated patients with active villous atrophy
+\end{itemize}

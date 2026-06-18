@@ -1,0 +1,263 @@
+\documentclass[11pt, a4paper, oneside]{Thesis}
+\usepackage{wrapfig}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{tikz}
+\usepackage{longtable}
+\usetikzlibrary{shapes.geometric, arrows, positioning, calc, decorations.pathreplacing, fit}
+
+\usepackage[square, numbers]{natbib}
+\hypersetup{urlcolor=black, colorlinks=true}
+\title{\ttitle}
+
+%======================================================================|
+\thesistitle{Foundation Model-Based Representation Learning for Immune Profiling of Type 1 Diabetes and Celiac Disease from Transcriptomic Data}
+\degree{B.Tech. Computer Science and Engineering}
+\authors{Harshit Verma \\[-2mm] (Roll No: 122CS0023)}
+\supervisor{Dr. Priyadarshini Rai}
+\department{Department of CSE}
+%======================================================================|
+
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+% Code listing style
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!60!black},
+  stringstyle=\color{red!70!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+}
+
+%======================================================================|
+\begin{document}
+\makeatletter
+\renewcommand*{\NAT@nmfmt}[1]{\textsc{#1}}
+\makeatother
+
+\frontmatter
+\setstretch{1.6}
+
+\fancyhead{}
+\rhead{\thepage}
+\lhead{}
+
+\pagestyle{fancy}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\hypersetup{pdftitle={\ttitle}}
+\hypersetup{pdfsubject=\subjectname}
+\hypersetup{pdfauthor=\authornames}
+\hypersetup{pdfkeywords=\keywordnames}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+\begin{center}
+
+\vspace*{-1.5cm}
+{\LARGE \bfseries \ttitle}\\[0.5cm]
+\vspace{0.4cm}
+
+\large \textit{Internship Report prepared towards the fulfilment of academic requirements\\ leading to the degree of \\ B.Tech --- Computer Science and Engineering}\\[0.25cm]
+\textit{by}\\[0.25cm]
+
+{\large \textbf{\authornames}}
+
+\vspace{0.5cm}
+\large \textit{Under the Guidance of}\\[0.15cm]
+{\large \textbf{Dr. Priyadarshini Rai}}\\[0.05cm]
+{\normalsize Assistant Professor, Dept. of CSE, IIITDM Kurnool}
+
+\vfill
+
+\graphicspath{ {./} }
+\includegraphics[width=0.28\linewidth]{klogo.png}
+
+\vspace{0.4cm}
+\DEPTNAME\\
+\textsc{\UNIVNAME}\\[0.4cm]
+{\large June 2026}
+
+\end{center}
+\end{titlepage}
+\thispagestyle{empty}
+
+%----------------------------------------------------------------------------------------
+%	DECLARATION PAGE
+%----------------------------------------------------------------------------------------
+
+\Declaration{\addtocontents{toc}{\vspace{1em}}
+
+{\setstretch{1.2}
+\noindent I, \textbf{Harshit Verma} (Roll No: \textbf{122CS0023}), hereby declare that this Internship Report titled \textbf{Foundation Model-Based Representation Learning for Immune Profiling of Type 1 Diabetes and Celiac Disease from Transcriptomic Data} is my own original work carried out in the \textbf{Department of Computer Science and Engineering}, \textbf{IIITDM Kurnool}, during the academic period \textbf{2025--2026}.
+
+\vspace{3mm}
+\noindent I affirm that:
+\begin{itemize}\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+    \item All data, results and analysis presented are genuine and unaltered.
+    \item All external sources have been properly cited with no plagiarism.
+    \item This work has not been submitted elsewhere for any other degree.
+\end{itemize}
+
+\vspace{6mm}
+\noindent Date: \hfill Student's Signature\\[8mm]
+
+\noindent \textbf{Supervisor's Certificate:} I certify that this work was carried out under my guidance and meets B.Tech. Internship academic standards.
+
+\vspace{5mm}
+\noindent Dr. Priyadarshini Rai, Assistant Professor \hfill Supervisor's Signature\\[8mm]
+
+\noindent \textbf{Head of Department:} Certified that the above statements are true to the best of my knowledge.
+
+\vspace{5mm}
+\noindent Dr. N. Srinivas Naik, Associate Professor \hfill HoD's Signature
+
+\vfill}
+}
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\addtotoc{Abstract}
+
+\abstract{\addtocontents{toc}{\vspace{1em}}
+
+Autoimmune diseases, such as Type 1 Diabetes (T1D) and Celiac Disease (CeD), arise from a failure of immune self-tolerance, leading to targeted tissue destruction. Understanding the peripheral and systemic immune landscape at high resolution is crucial for diagnostics and therapeutic discovery. This project applies state-of-the-art representation learning and foundation models to profile the immune dysregulation in both T1D and Celiac Disease using transcriptomic data.
+
+For Type 1 Diabetes, a single-cell RNA-seq dataset of 117,737 peripheral blood mononuclear cells (PBMCs) from 77 subjects was analysed. We evaluated a task-specific variational autoencoder (scVI) and a 30-million parameter pre-trained transformer foundation model (Geneformer). Under 5-fold cross-validation, patient-level embeddings extracted from scVI coupled with a Histogram Gradient Boosting classifier achieved an ROC-AUC of 0.8976. Remarkably, Geneformer applied in a completely zero-shot manner (without T1D-specific training) achieved an ROC-AUC of 0.8893. Supervised fine-tuning of Geneformer yielded an AUC of 0.86, suggesting the pre-trained model already captured the maximal biological signal perfectly out-of-the-box, mitigating the need for expensive fine-tuning.
+
+For Celiac Disease, we employed a dual-modality approach. Single-cell RNA-seq from 4 patients was aligned to the T1D latent space, revealing that Celiac PBMCs cluster more closely to healthy controls than T1D, indicative of a more localised pathology. To achieve robust clinical classification, we trained machine learning classifiers on bulk RNA-seq data from 36 intestinal biopsy samples. An SVM classifier identified active Celiac disease versus healthy controls with an ROC-AUC of 0.967, and successfully distinguished between Healthy, Gluten-Free Diet (GFD), and Active Celiac with 72.5\% multi-class accuracy.
+
+Collectively, this work demonstrates that foundation models and representation learning robustly capture disease-specific immune signatures from both single-cell and bulk transcriptomic data, enabling highly accurate clinical discrimination without relying on clinical metadata.
+}
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+\setstretch{1.3}
+
+\acknowledgements{\addtocontents{toc}{\vspace{1em}}
+
+I would like to extend my sincerest gratitude to my internship supervisor, \textbf{Dr. Priyadarshini Rai}, Assistant Professor, Department of Computer Science and Engineering, IIITDM Kurnool, for her invaluable guidance, constant encouragement, and insightful discussions throughout this project. Her mentorship was instrumental in shaping the direction and rigour of this research.
+
+I am grateful to the Department of Computer Science and Engineering, IIITDM Kurnool, for providing the computational resources---including a dedicated GPU workstation (NVIDIA RTX 2000 Ada, 16\,GB VRAM)---that made this work feasible.
+
+I sincerely thank the creators of the Geneformer pre-trained model (Theodoris et al., Nature 2023) and the scvi-tools library (Lopez et al., Nature Methods 2018) for making their models and code publicly available to the research community.
+
+I also thank the authors of the T1D PBMC dataset used in this work for making their systematically collected clinical single-cell data accessible for research.
+
+Finally, I thank my family and friends for their moral support and encouragement throughout this internship.
+
+}
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	LIST OF CONTENTS/FIGURES/TABLES
+%----------------------------------------------------------------------------------------
+
+\pagestyle{fancy}
+
+\lhead{\emph{Contents}}
+\tableofcontents
+
+\lhead{\emph{List of Figures}}
+\listoffigures
+
+\lhead{\emph{List of Tables}}
+\listoftables
+
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+
+\clearpage
+\setstretch{1.5}
+\lhead{\emph{Abbreviations}}
+\listofsymbols{ll}
+{
+\textbf{T1D}      & \textbf{T}ype \textbf{1} \textbf{D}iabetes \\
+\textbf{scRNA-seq} & \textbf{S}ingle-\textbf{C}ell \textbf{RNA} \textbf{Seq}uencing \\
+\textbf{PBMC}     & \textbf{P}eripheral \textbf{B}lood \textbf{M}ononuclear \textbf{C}ell \\
+\textbf{VAE}      & \textbf{V}ariational \textbf{A}uto\textbf{E}ncoder \\
+\textbf{scVI}     & \textbf{S}ingle-\textbf{C}ell \textbf{V}ariational \textbf{I}nference \\
+\textbf{HVG}      & \textbf{H}ighly \textbf{V}ariable \textbf{G}ene \\
+\textbf{ELBO}     & \textbf{E}vidence \textbf{L}ower \textbf{BO}und \\
+\textbf{HGB}      & \textbf{H}istogram \textbf{G}radient \textbf{B}oosting \\
+\textbf{ROC-AUC}  & \textbf{R}eceiver \textbf{O}perating \textbf{C}haracteristic -- \textbf{A}rea \textbf{U}nder \textbf{C}urve \\
+\textbf{CV}       & \textbf{C}ross-\textbf{V}alidation \\
+\textbf{RF}       & \textbf{R}andom \textbf{F}orest \\
+\textbf{SVM}      & \textbf{S}upport \textbf{V}ector \textbf{M}achine \\
+\textbf{LR}       & \textbf{L}ogistic \textbf{R}egression \\
+\textbf{PCA}      & \textbf{P}rincipal \textbf{C}omponent \textbf{A}nalysis \\
+\textbf{UMAP}     & \textbf{U}niform \textbf{M}anifold \textbf{A}pproximation and \textbf{P}rojection \\
+\textbf{NB}       & \textbf{N}egative \textbf{B}inomial \\
+\textbf{HLA}      & \textbf{H}uman \textbf{L}eukocyte \textbf{A}ntigen \\
+\textbf{SCT}      & \textbf{SC}Transform (Seurat normalisation method) \\
+\textbf{GPU}      & \textbf{G}raphics \textbf{P}rocessing \textbf{U}nit \\
+\textbf{VRAM}     & \textbf{V}ideo \textbf{RAM} \\
+}
+
+%----------------------------------------------------------------------------------------
+%	DEDICATION
+%----------------------------------------------------------------------------------------
+
+\setstretch{1.3}
+\pagestyle{empty}
+\dedicatory{Dedicated to my parents and teachers, whose support made this work possible.}
+\addtocontents{toc}{\vspace{2em}}
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT --- CHAPTERS
+%----------------------------------------------------------------------------------------
+\mainmatter
+\pagestyle{fancy}
+
+\input{chap_1}
+\input{chap_2}
+\input{chap_3}
+\input{chap_4}
+\input{chap_5}
+\input{chap_6}
+\input{chap_7}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\addtocontents{toc}{\vspace{2em}}
+\backmatter
+
+\label{Bibliography}
+\lhead{\emph{Bibliography}}
+\bibliographystyle{IEEEtran}
+\bibliography{Bibliography}
+
+\end{document}

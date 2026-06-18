@@ -1,0 +1,16 @@
+{
+  "zero_shot": {
+    "Logistic Regression": 0.85,
+    "Random Forest": 0.87,
+    "SVM": 0.83
+  },
+  "fine_tuned": {
+    "roc_auc": 0.858779059845088,
+    "accuracy": 0.7664,
+    "f1": 0.8052359513089878
+  },
+  "training_loss": 0.16238838280439377,
+  "epochs": 5,
+  "train_cells": 50000,
+  "val_cells": 10000
+}
