@@ -20,9 +20,12 @@ data/
 fine_tuned_t1d/checkpoints/
 Geneformer/
 
-# Large embedding outputs (1.6GB+)
+# Large embedding outputs (100MB+ — too large for GitHub)
+results/geneformer_embs.csv
 results/geneformer_cell_embeddings.csv
 results/geneformer_cell_embeddings.pkl
+celiac_analysis/results/geneformer_patient_embeddings.csv
+celiac_analysis/results/scvi_patient_embeddings.csv
 
 # LaTeX build artifacts
 latex_report/*.aux
